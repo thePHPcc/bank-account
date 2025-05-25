@@ -26,6 +26,9 @@ final class MarketEndToEndTest extends TestCase
         );
     }
 
+    /**
+     * @param non-empty-string $uri
+     */
     private function request(string $uri): string
     {
         assert(defined('TEST_WEB_SERVER_BASE_URL'));
