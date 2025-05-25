@@ -42,8 +42,10 @@ final class EventJsonMapper
 
         $this->ensureJsonCanBeMapped($data);
 
-        assert(isset($data['topic']) && is_string($data['topic']));
-        assert(isset($data['event_id']) && is_string($data['event_id']));
+        assert(isset($data['topic']));
+        assert(is_string($data['topic']));
+        assert(isset($data['event_id']));
+        assert(is_string($data['event_id']));
         assert(isset($this->mappers[$data['topic']]));
 
         /** @phpstan-ignore argument.type */
