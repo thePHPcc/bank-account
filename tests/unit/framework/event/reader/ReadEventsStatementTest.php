@@ -32,4 +32,25 @@ final class ReadEventsStatementTest extends TestCase
 
         $statement->execute($connection);
     }
+
+    public function testExecutesStatementToReadEventsByTopics(): void
+    {
+        $connection = $this->createMock(ReadingDatabaseConnection::class);
+
+        $connection
+            ->expects($this->once())
+            ->method('query')
+            ->with(
+                'SELECT payload
+                   FROM event
+                  WHERE topic IN (?, ?)
+                  ORDER BY id;',
+                'the-topic',
+                'another-topic',
+            );
+
+        $statement = new ReadEventsStatement(['the-topic', 'another-topic']);
+
+        $statement->execute($connection);
+    }
 }
