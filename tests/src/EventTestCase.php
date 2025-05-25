@@ -6,15 +6,18 @@ use function array_keys;
 use function array_values;
 use function assert;
 use example\caledonia\application\DispatchingEventEmitter;
-use example\caledonia\application\EventEmitter;
 use example\caledonia\application\MarketEventSourcer;
-use example\caledonia\application\MarketSourcer;
-use example\caledonia\domain\Command;
+use example\caledonia\application\ProcessingPurchaseGoodCommandProcessor;
+use example\caledonia\application\ProcessingSellGoodCommandProcessor;
+use example\caledonia\application\PurchaseGoodCommandProcessor;
+use example\caledonia\application\SellGoodCommandProcessor;
 use example\caledonia\domain\Good;
 use example\caledonia\domain\GoodPurchasedEvent;
 use example\caledonia\domain\GoodSoldEvent;
 use example\caledonia\domain\Price;
 use example\caledonia\domain\PriceChangedEvent;
+use example\caledonia\domain\PurchaseGoodCommand;
+use example\caledonia\domain\SellGoodCommand;
 use example\framework\library\RandomUuidGenerator;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -57,8 +60,12 @@ abstract class EventTestCase extends TestCase
         $this->documentation .= PHP_EOL;
     }
 
-    final protected function recordWhen(Command $command): void
+    final protected function when(PurchaseGoodCommand|SellGoodCommand $command): void
     {
+        $processor = $this->processorFor($command);
+
+        $processor->process($command);
+
         $this->documentation .= 'When:' . PHP_EOL . PHP_EOL;
         $this->documentation .= '    - ' . $command->asString() . PHP_EOL . PHP_EOL;
     }
@@ -124,14 +131,12 @@ abstract class EventTestCase extends TestCase
         );
     }
 
-    final protected function emitter(): EventEmitter
+    private function processorFor(PurchaseGoodCommand|SellGoodCommand $command): PurchaseGoodCommandProcessor|SellGoodCommandProcessor
     {
-        return $this->emitter;
-    }
-
-    final protected function sourcer(): MarketSourcer
-    {
-        return $this->sourcer;
+        return match ($command::class) {
+            PurchaseGoodCommand::class => new ProcessingPurchaseGoodCommandProcessor($this->emitter, $this->sourcer),
+            SellGoodCommand::class     => new ProcessingSellGoodCommandProcessor($this->emitter, $this->sourcer),
+        };
     }
 
     private function assertEventObjectsAreEqualExceptForUuid(Event $expected, Event $actual): void

@@ -52,6 +52,7 @@ parameters:
         # ignore errors caused by defensive programming
         - '#Call to method .* will always evaluate to true.#'
         - '#Call to method .* will always evaluate to false.#'
+        - '#Match arm comparison between .* and .* is always true.#'
 
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon

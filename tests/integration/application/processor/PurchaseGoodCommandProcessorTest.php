@@ -29,13 +29,4 @@ final class PurchaseGoodCommandProcessorTest extends EventTestCase
             $this->priceChanged(Good::Bread, Price::from(11), Price::from(12)),
         );
     }
-
-    private function when(PurchaseGoodCommand $command): void
-    {
-        $processor = new ProcessingPurchaseGoodCommandProcessor($this->emitter(), $this->sourcer());
-
-        $processor->process($command);
-
-        $this->recordWhen($command);
-    }
 }
