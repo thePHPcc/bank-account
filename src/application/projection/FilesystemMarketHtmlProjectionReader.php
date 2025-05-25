@@ -4,6 +4,7 @@ namespace example\caledonia\application;
 use function assert;
 use function file_exists;
 use function file_get_contents;
+use function is_string;
 
 /**
  * @no-named-arguments
@@ -29,7 +30,7 @@ final readonly class FilesystemMarketHtmlProjectionReader implements MarketHtmlP
     {
         $buffer = file_get_contents($this->path);
 
-        assert($buffer !== false);
+        assert(is_string($buffer));
 
         return $buffer;
     }
