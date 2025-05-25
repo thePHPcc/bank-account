@@ -34,7 +34,7 @@ abstract readonly class Request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $body = file_get_contents('php://input');
 
-            assert($body !== false && $body !== '');
+            assert(is_string($body));
 
             return new PostRequest($_SERVER['REQUEST_URI'], $body);
         }
