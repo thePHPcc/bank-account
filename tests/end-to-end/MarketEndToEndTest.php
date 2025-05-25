@@ -31,7 +31,7 @@ final class MarketEndToEndTest extends TestCase
     /**
      * @param non-empty-string $uri
      *
-     * @return array{body: string, headers: list<non-empty-string>}
+     * @return array{body: string, headers: list<string>}
      */
     private function request(string $uri): array
     {
