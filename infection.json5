@@ -16,6 +16,11 @@
                 "example\\framework\\library\\Uuid::ensureIsValidUuid"
             ]
         },
+        "CastString": {
+            "ignore": [
+                "example\\caledonia\\application\\MarketHtmlProjector::project"
+            ]
+        },
         "DecrementInteger": {
             "ignore": [
                 "example\\caledonia\\domain\\Market::create",
