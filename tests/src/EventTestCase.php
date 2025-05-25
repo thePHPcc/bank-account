@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace example\framework\event;
 
-use const PHP_EOL;
 use function array_keys;
 use function array_values;
 use function assert;
@@ -136,7 +135,6 @@ EOT;
             $this->then[] = $event->asString();
         }
 
-        $this->provideMarkdown();
         $this->provideGraphViz();
     }
 
@@ -193,28 +191,6 @@ EOT;
             (array) $actual,
             ["\0example\\framework\\event\\Event\0id"],
         );
-    }
-
-    private function provideMarkdown(): void
-    {
-        $buffer = 'Given:' . PHP_EOL . PHP_EOL;
-
-        foreach ($this->given as $given) {
-            $buffer .= '    - ' . $given . PHP_EOL;
-        }
-
-        $buffer .= PHP_EOL;
-
-        $buffer .= 'When:' . PHP_EOL . PHP_EOL;
-        $buffer .= '    - ' . $this->when . PHP_EOL . PHP_EOL;
-
-        $buffer .= 'Then:' . PHP_EOL . PHP_EOL;
-
-        foreach ($this->then as $then) {
-            $buffer .= '    - ' . $then . PHP_EOL;
-        }
-
-        $this->provideAdditionalInformation($buffer);
     }
 
     private function provideGraphViz(): void
