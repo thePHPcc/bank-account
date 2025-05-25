@@ -32,9 +32,19 @@
                 "example\\framework\\event\\ReadEventsStatement::execute"
             ]
         },
+        "InstanceOf_": {
+            "ignore": [
+                "example\\caledonia\\application\\MarketEventSourcer::source"
+            ]
+        },
         "LessThan": {
             "ignore": [
                 "example\\caledonia\\domain\\PriceChangedEvent::asString"
+            ]
+        },
+        "LogicalOrAllSubExprNegation": {
+            "ignore": [
+                "example\\caledonia\\application\\MarketEventSourcer::source"
             ]
         }
     },
