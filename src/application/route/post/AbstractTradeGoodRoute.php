@@ -21,8 +21,12 @@ abstract readonly class AbstractTradeGoodRoute
         $data = json_decode($json, true);
 
         assert(is_array($data));
-        assert(isset($data['good']) && in_array($data['good'], ['bread', 'cheese', 'grain', 'milk', 'whisky', 'wool'], true));
-        assert(isset($data['amount']) && is_int($data['amount']));
+        assert(isset($data['good']));
+        assert(in_array($data['good'], ['bread', 'cheese', 'grain', 'milk', 'whisky', 'wool'], true));
+        assert(isset($data['amount']));
+        assert(is_int($data['amount']));
+        assert(isset($data['amount']));
+        assert(is_int($data['amount']));
 
         $amount = $data['amount'];
 
