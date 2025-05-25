@@ -75,6 +75,18 @@ final class PriceChangedEventTest extends TestCase
         $this->assertSame($expected, $event->asString());
     }
 
+    public function testOldAndNewPriceMustBeDifferent(): void
+    {
+        $this->expectException(OldAndNewPriceMustBeDifferentException::class);
+
+        new PriceChangedEvent(
+            new Uuid(self::UUID),
+            Good::Bread,
+            Price::from(1),
+            Price::from(1),
+        );
+    }
+
     private function event(): PriceChangedEvent
     {
         return new PriceChangedEvent(

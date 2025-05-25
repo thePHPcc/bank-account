@@ -14,8 +14,13 @@ final readonly class PriceChangedEvent extends Event
     private Price $old;
     private Price $new;
 
+    /**
+     * @throws OldAndNewPriceMustBeDifferentException
+     */
     public function __construct(Uuid $id, Good $good, Price $old, Price $new)
     {
+        $this->ensureOldAndNewPriceAreDifferent($old, $new);
+
         parent::__construct($id);
 
         $this->good = $good;
@@ -58,5 +63,15 @@ final readonly class PriceChangedEvent extends Event
     public function new(): Price
     {
         return $this->new;
+    }
+
+    /**
+     * @throws OldAndNewPriceMustBeDifferentException
+     */
+    private function ensureOldAndNewPriceAreDifferent(Price $old, Price $new): void
+    {
+        if ($new->equals($old)) {
+            throw new OldAndNewPriceMustBeDifferentException;
+        }
     }
 }
