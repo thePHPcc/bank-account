@@ -41,4 +41,14 @@ final class RequestTest extends TestCase
         $this->assertInstanceOf(PostRequest::class, $request);
         $this->assertSame('uri', $request->uri());
     }
+
+    public function testThrowsExceptionForUnsupportedRequestMethod(): void
+    {
+        $_SERVER['REQUEST_URI']    = 'uri';
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+
+        $this->expectException(UnsupportedRequestException::class);
+
+        Request::fromSuperGlobals();
+    }
 }
