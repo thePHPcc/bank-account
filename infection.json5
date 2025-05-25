@@ -11,6 +11,11 @@
     },
     "mutators": {
         "@default": true,
+        "@regex": {
+            "ignore": [
+                "example\\framework\\library\\Uuid::ensureIsValidUuid"
+            ]
+        },
         "DecrementInteger": {
             "ignore": [
                 "example\\caledonia\\domain\\Market::create",
