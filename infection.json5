@@ -13,7 +13,13 @@
         "@default": true,
         "DecrementInteger": {
             "ignore": [
-                "example\\caledonia\\domain\\Market::create"
+                "example\\caledonia\\domain\\Market::create",
+                "example\\framework\\event\\ReadEventsStatement::execute"
+            ]
+        },
+        "IncrementInteger": {
+            "ignore": [
+                "example\\framework\\event\\ReadEventsStatement::execute"
             ]
         },
         "LessThan": {
