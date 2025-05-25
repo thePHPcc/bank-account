@@ -18,6 +18,14 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class EventCollectionTest extends TestCase
 {
+    public function testCanBeEmpty(): void
+    {
+        $events = EventCollection::empty();
+
+        $this->assertTrue($events->isEmpty());
+        $this->assertFalse($events->isNotEmpty());
+    }
+
     #[TestDox('Can be created from list of Event objects')]
     public function testCanBeCreatedFromListOfObjects(): void
     {
