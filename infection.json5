@@ -46,6 +46,12 @@
             "ignore": [
                 "example\\caledonia\\application\\MarketEventSourcer::source"
             ]
+        },
+        "ProtectedVisibility": {
+            "ignore": [
+                "example\\framework\\http\\GetRequest::__construct",
+                "example\\framework\\http\\PostRequest::__construct"
+            ]
         }
     },
     "minMsi": 100,
