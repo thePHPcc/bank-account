@@ -1,15 +1,13 @@
 <?php declare(strict_types=1);
 namespace example\framework\event\test\extension;
 
+use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 use function assert;
-use function dirname;
 use function file_put_contents;
 use function is_dir;
-use function is_file;
 use function ksort;
 use function mkdir;
-use function unlink;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
 use PHPUnit\Runner\Extension\Facade as ExtensionFacade;
@@ -21,7 +19,7 @@ final class Extension implements ExtensionInterface
     /**
      * @var non-empty-string
      */
-    private string $target;
+    private string $targetDirectory;
 
     /**
      * @var array<string, list<array{testdox: string, specification: string}>>
@@ -30,17 +28,17 @@ final class Extension implements ExtensionInterface
 
     public function bootstrap(Configuration $configuration, ExtensionFacade $facade, ParameterCollection $parameters): void
     {
-        $target = '/tmp/events.md';
+        $targetDirectory = '/tmp';
 
-        if ($parameters->has('target')) {
-            $target = $parameters->get('target');
+        if ($parameters->has('targetDirectory')) {
+            $targetDirectory = $parameters->get('targetDirectory');
         }
 
-        assert($target !== '');
+        assert($targetDirectory !== '');
 
-        $this->target = $target;
+        $this->targetDirectory = $targetDirectory;
 
-        $this->prepareLogfile($this->target);
+        $this->createDirectory($this->targetDirectory);
 
         $facade->registerSubscribers(
             new AdditionalInformationProvidedSubscriber($this),
@@ -75,19 +73,14 @@ final class Extension implements ExtensionInterface
             }
         }
 
-        file_put_contents($this->target, $buffer);
+        file_put_contents($this->targetDirectory . DIRECTORY_SEPARATOR . 'events.md', $buffer);
     }
 
-    private function prepareLogfile(string $target): void
+    /**
+     * @param non-empty-string $directory
+     */
+    private function createDirectory(string $directory): bool
     {
-        if (is_file($target)) {
-            unlink($target);
-
-            return;
-        }
-
-        if (!is_dir(dirname($target))) {
-            @mkdir(dirname($target), 0o777, true);
-        }
+        return !(!is_dir($directory) && !@mkdir($directory, 0o777, true) && !is_dir($directory));
     }
 }

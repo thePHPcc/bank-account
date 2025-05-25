@@ -58,7 +58,7 @@
 
     <extensions>
         <bootstrap class="example\framework\event\test\extension\Extension">
-            <parameter name="target" value="build/events.md"/>
+            <parameter name="targetDirectory" value="build"/>
         </bootstrap>
     </extensions>
 </phpunit>
