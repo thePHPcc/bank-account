@@ -20,26 +20,33 @@ final class MarketEndToEndTest extends TestCase
     #[TestDox('GET request to /market sends response with HTML projection')]
     public function testGetRequestToMarketSendsResponseWithHtmlProjection(): void
     {
+        $response = $this->request('/market');
+
         $this->assertStringEqualsFile(
             __DIR__ . '/../expectation/market.html',
-            $this->request('/market'),
+            $response['body'],
         );
     }
 
     /**
      * @param non-empty-string $uri
+     *
+     * @return array{body: string, headers: list<non-empty-string>}
      */
-    private function request(string $uri): string
+    private function request(string $uri): array
     {
         assert(defined('TEST_WEB_SERVER_BASE_URL'));
         assert(is_string(TEST_WEB_SERVER_BASE_URL));
 
-        $response = @file_get_contents(TEST_WEB_SERVER_BASE_URL . $uri);
+        $body = @file_get_contents(TEST_WEB_SERVER_BASE_URL . $uri);
 
-        if ($response === false) {
+        if ($body === false) {
             $this->markTestSkipped('Could not connect to ' . TEST_WEB_SERVER_BASE_URL);
         }
 
-        return $response;
+        return [
+            'body'    => $body,
+            'headers' => $http_response_header,
+        ];
     }
 }
