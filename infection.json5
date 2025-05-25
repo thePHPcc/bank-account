@@ -11,6 +11,11 @@
     },
     "mutators": {
         "@default": true,
+        "DecrementInteger": {
+            "ignore": [
+                "example\\caledonia\\domain\\Market::create"
+            ]
+        },
         "LessThan": {
             "ignore": [
                 "example\\caledonia\\domain\\PriceChangedEvent::asString"
