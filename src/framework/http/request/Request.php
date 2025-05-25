@@ -17,8 +17,10 @@ abstract readonly class Request
      */
     public static function fromSuperGlobals(): GetRequest|PostRequest
     {
-        assert(isset($_SERVER['REQUEST_METHOD']) && is_string($_SERVER['REQUEST_METHOD']));
-        assert(isset($_SERVER['REQUEST_URI']) && is_string($_SERVER['REQUEST_URI']));
+        assert(isset($_SERVER['REQUEST_METHOD']));
+        assert(is_string($_SERVER['REQUEST_METHOD']));
+        assert(isset($_SERVER['REQUEST_URI']));
+        assert(is_string($_SERVER['REQUEST_URI']));
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return new GetRequest(
