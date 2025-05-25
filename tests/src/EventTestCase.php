@@ -28,7 +28,17 @@ abstract class EventTestCase extends TestCase
     private MarketEventSourcer $sourcer;
     private DispatchingEventEmitter $emitter;
     private CollectingEventDispatcher $dispatcher;
-    private string $documentation;
+
+    /**
+     * @var list<non-empty-string>
+     */
+    private array $given = [];
+    private string $when;
+
+    /**
+     * @var list<non-empty-string>
+     */
+    private array $then = [];
 
     final protected function setUp(): void
     {
@@ -51,13 +61,9 @@ abstract class EventTestCase extends TestCase
             ->method('topic')
             ->willReturn($events);
 
-        $this->documentation = 'Given:' . PHP_EOL . PHP_EOL;
-
         foreach ($events as $event) {
-            $this->documentation .= '    - ' . $event->asString() . PHP_EOL;
+            $this->given[] = $event->asString();
         }
-
-        $this->documentation .= PHP_EOL;
     }
 
     final protected function when(PurchaseGoodCommand|SellGoodCommand $command): void
@@ -66,8 +72,7 @@ abstract class EventTestCase extends TestCase
 
         $processor->process($command);
 
-        $this->documentation .= 'When:' . PHP_EOL . PHP_EOL;
-        $this->documentation .= '    - ' . $command->asString() . PHP_EOL . PHP_EOL;
+        $this->when = $command->asString();
     }
 
     final protected function then(Event ...$events): void
@@ -86,13 +91,11 @@ abstract class EventTestCase extends TestCase
             $this->assertEventObjectsAreEqualExceptForUuid($expected[$key], $actual[$key]);
         }
 
-        $this->documentation .= 'Then:' . PHP_EOL . PHP_EOL;
-
         foreach ($events as $event) {
-            $this->documentation .= '    - ' . $event->asString() . PHP_EOL;
+            $this->then[] = $event->asString();
         }
 
-        $this->provideAdditionalInformation($this->documentation);
+        $this->provideMarkdown();
     }
 
     /**
@@ -148,5 +151,27 @@ abstract class EventTestCase extends TestCase
             (array) $actual,
             ["\0example\\framework\\event\\Event\0id"],
         );
+    }
+
+    private function provideMarkdown(): void
+    {
+        $buffer = 'Given:' . PHP_EOL . PHP_EOL;
+
+        foreach ($this->given as $given) {
+            $buffer .= '    - ' . $given . PHP_EOL;
+        }
+
+        $buffer .= PHP_EOL;
+
+        $buffer .= 'When:' . PHP_EOL . PHP_EOL;
+        $buffer .= '    - ' . $this->when . PHP_EOL . PHP_EOL;
+
+        $buffer .= 'Then:' . PHP_EOL . PHP_EOL;
+
+        foreach ($this->then as $then) {
+            $buffer .= '    - ' . $then . PHP_EOL;
+        }
+
+        $this->provideAdditionalInformation($buffer);
     }
 }
