@@ -14,6 +14,20 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class GetRequestTest extends TestCase
 {
+    #[RunInSeparateProcess]
+    public function testCanBeCreatedFromSuperGlobals(): void
+    {
+        $_SERVER['REQUEST_URI']    = 'uri';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_GET                      = ['key' => 'value'];
+
+        $request = Request::fromSuperGlobals();
+
+        $this->assertInstanceOf(GetRequest::class, $request);
+        $this->assertTrue($request->has('key'));
+        $this->assertSame('value', $request->get('key'));
+    }
+
     public function testHasUri(): void
     {
         $uri = 'uri';
@@ -40,20 +54,6 @@ final class GetRequestTest extends TestCase
         $this->expectException(ParameterDoesNotExistException::class);
 
         $request->get('key');
-    }
-
-    #[RunInSeparateProcess]
-    public function testCanBeCreatedFromSuperGlobals(): void
-    {
-        $_SERVER['REQUEST_URI']    = 'uri';
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_GET                      = ['key' => 'value'];
-
-        $request = Request::fromSuperGlobals();
-
-        $this->assertInstanceOf(GetRequest::class, $request);
-        $this->assertTrue($request->has('key'));
-        $this->assertSame('value', $request->get('key'));
     }
 
     public function testCanBeQueriedForItsType(): void
