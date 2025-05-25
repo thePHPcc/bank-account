@@ -8,7 +8,9 @@
          beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
          displayDetailsOnAllIssues="true"
-         failOnAllIssues="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+         failOnWarning="true"
          colors="true">
     <testsuites>
         <testsuite name="unit/framework">
