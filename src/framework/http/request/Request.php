@@ -30,7 +30,6 @@ abstract readonly class Request
             );
         }
 
-        // @codeCoverageIgnoreStart
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $body = file_get_contents('php://input');
 
@@ -40,7 +39,6 @@ abstract readonly class Request
         }
 
         throw new UnsupportedRequestException;
-        // @codeCoverageIgnoreEnd
     }
 
     protected function __construct(string $uri)
