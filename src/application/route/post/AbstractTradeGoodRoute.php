@@ -16,7 +16,7 @@ abstract readonly class AbstractTradeGoodRoute
     /**
      * @return array{good: Good, amount: positive-int}
      */
-    public function decode(string $json): array
+    final protected function decode(string $json): array
     {
         $data = json_decode($json, true);
 
