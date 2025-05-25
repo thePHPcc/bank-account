@@ -26,9 +26,11 @@ final class Response
 
     public function send(): void
     {
+        // @codeCoverageIgnoreStart
         foreach ($this->headers as $header) {
             header($header);
         }
+        // @codeCoverageIgnoreEnd
 
         print $this->body;
     }
