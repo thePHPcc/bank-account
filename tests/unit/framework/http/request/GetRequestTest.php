@@ -24,6 +24,7 @@ final class GetRequestTest extends TestCase
         $request = Request::fromSuperGlobals();
 
         $this->assertInstanceOf(GetRequest::class, $request);
+        $this->assertSame('uri', $request->uri());
         $this->assertTrue($request->has('key'));
         $this->assertSame('value', $request->get('key'));
     }
