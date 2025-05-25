@@ -280,3 +280,46 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           disable_search: true
           files: ./code-coverage.xml
+
+  mutation-testing:
+    name: Mutation Testing
+
+    needs:
+      - end-to-end-tests
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install MySQL
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: "9.0"
+
+      - name: Set up test database
+        run: mysql -u root < ./sql/schema.sql
+
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: xdebug
+          tools: none
+
+      - name: Install dependencies with Composer
+        run: ./tools/composer update --no-ansi --no-interaction --no-progress
+
+      - name: Create directory for projections
+        run: mkdir projections
+
+      - name: Create projection
+        run: ./bin/project.php projections/market.html
+
+      - name: Start PHP built-in server
+        run: php -S 127.0.0.1:8080 -t public &
+
+      - name: Perform mutation testing with Infection
+        run: ./tools/infection --threads=max --ignore-msi-with-no-mutations --only-covered
