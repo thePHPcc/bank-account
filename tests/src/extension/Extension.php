@@ -8,6 +8,9 @@ use function file_put_contents;
 use function is_dir;
 use function ksort;
 use function mkdir;
+use function sprintf;
+use function str_replace;
+use function str_starts_with;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
 use PHPUnit\Runner\Extension\Facade as ExtensionFacade;
@@ -48,6 +51,20 @@ final class Extension implements ExtensionInterface
 
     public function testProvidedAdditionalInformation(AdditionalInformationProvided $event): void
     {
+        if (str_starts_with($event->additionalInformation(), 'strict digraph G {')) {
+            file_put_contents(
+                sprintf(
+                    '%s%s%s.dot',
+                    $this->targetDirectory,
+                    DIRECTORY_SEPARATOR,
+                    str_replace(['\\', '::'], '_', $event->test()->id()),
+                ),
+                $event->additionalInformation(),
+            );
+
+            return;
+        }
+
         if (!isset($this->specification[$event->test()->testDox()->prettifiedClassName()])) {
             $this->specification[$event->test()->testDox()->prettifiedClassName()] = [];
         }
