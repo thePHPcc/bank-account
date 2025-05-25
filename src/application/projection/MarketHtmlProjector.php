@@ -3,6 +3,7 @@ namespace example\caledonia\application;
 
 use function assert;
 use function file_get_contents;
+use function is_string;
 use function range;
 use function str_replace;
 use example\caledonia\domain\Market;
@@ -19,7 +20,7 @@ final readonly class MarketHtmlProjector
 
         $rowTemplate = file_get_contents(__DIR__ . '/../../../templates/market_row.html');
 
-        assert($rowTemplate !== false);
+        assert(is_string($rowTemplate));
 
         foreach (range(9, 1) as $row) {
             /** @var int<1,9> $row */
@@ -58,7 +59,7 @@ final readonly class MarketHtmlProjector
 
         $pageTemplate = file_get_contents(__DIR__ . '/../../../templates/market_page.html');
 
-        assert($pageTemplate !== false);
+        assert(is_string($pageTemplate));
 
         return str_replace(
             '{rows}',
