@@ -90,7 +90,7 @@ abstract class EventTestCase extends TestCase
             assert(isset($expected[$key]));
             assert(isset($actual[$key]));
 
-            $this->assertEventObjectsAreEqualExceptForUuid($expected[$key], $actual[$key]);
+            $this->assertEventObjectsAreEqual($expected[$key], $actual[$key]);
         }
 
         foreach ($events as $event) {
@@ -153,14 +153,9 @@ abstract class EventTestCase extends TestCase
         };
     }
 
-    private function assertEventObjectsAreEqualExceptForUuid(Event $expected, Event $actual): void
+    private function assertEventObjectsAreEqual(Event $expected, Event $actual): void
     {
         $this->assertInstanceOf($expected::class, $actual);
-
-        $this->assertArrayIsEqualToArrayIgnoringListOfKeys(
-            (array) $expected,
-            (array) $actual,
-            ["\0example\\framework\\event\\Event\0id"],
-        );
+        $this->assertSame($expected->asString(), $actual->asString());
     }
 }
