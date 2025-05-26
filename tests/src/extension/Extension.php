@@ -6,14 +6,19 @@ use const JSON_THROW_ON_ERROR;
 use function array_is_list;
 use function array_pop;
 use function assert;
+use function exec;
 use function explode;
 use function file_put_contents;
+use function in_array;
 use function is_array;
 use function is_dir;
 use function is_string;
 use function json_decode;
 use function mkdir;
 use function sprintf;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
 use PHPUnit\Runner\Extension\Facade as ExtensionFacade;
@@ -26,6 +31,11 @@ final class Extension implements ExtensionInterface
      * @var non-empty-string
      */
     private string $targetDirectory;
+
+    /**
+     * @var 'dot'|'pdf'|'png'|'svg'
+     */
+    private string $format;
 
     public function bootstrap(Configuration $configuration, ExtensionFacade $facade, ParameterCollection $parameters): void
     {
@@ -40,6 +50,16 @@ final class Extension implements ExtensionInterface
         $this->targetDirectory = $targetDirectory;
 
         $this->createDirectory($this->targetDirectory);
+
+        $format = 'dot';
+
+        if ($parameters->has('format')) {
+            if (in_array($parameters->get('format'), ['dot', 'pdf', 'png', 'svg'], true)) {
+                $format = $parameters->get('format');
+            }
+        }
+
+        $this->format = $format;
 
         $facade->registerSubscriber(new AdditionalInformationProvidedSubscriber($this));
     }
@@ -61,23 +81,44 @@ final class Extension implements ExtensionInterface
         $tmp       = explode('\\', $event->test()->className());
         $className = array_pop($tmp);
 
-        file_put_contents(
+        $dot = (new DotRenderer)->render(
+            /** @phpstan-ignore argument.type */
+            $data['given'],
+            /** @phpstan-ignore argument.type */
+            $data['when'],
+            /** @phpstan-ignore argument.type */
+            $data['then'],
+        );
+
+        $target = sprintf(
+            '%s%s%s_%s.%s',
+            $this->targetDirectory,
+            DIRECTORY_SEPARATOR,
+            $className,
+            $event->test()->methodName(),
+            $this->format,
+        );
+
+        if ($this->format === 'dot') {
+            file_put_contents($target, $dot);
+
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'graphviz');
+
+        file_put_contents($tmpFile, $dot);
+
+        exec(
             sprintf(
-                '%s%s%s_%s.dot',
-                $this->targetDirectory,
-                DIRECTORY_SEPARATOR,
-                $className,
-                $event->test()->methodName(),
-            ),
-            (new DotRenderer)->render(
-                /** @phpstan-ignore argument.type */
-                $data['given'],
-                /** @phpstan-ignore argument.type */
-                $data['when'],
-                /** @phpstan-ignore argument.type */
-                $data['then'],
+                'dot -T%s -o %s %s > /dev/null 2>&1',
+                $this->format,
+                $target,
+                $tmpFile,
             ),
         );
+
+        unlink($tmpFile);
     }
 
     /**
