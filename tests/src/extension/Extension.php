@@ -4,7 +4,9 @@ namespace example\framework\event\test\extension;
 use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 use function array_is_list;
+use function array_pop;
 use function assert;
+use function explode;
 use function file_put_contents;
 use function is_array;
 use function is_dir;
@@ -12,7 +14,6 @@ use function is_string;
 use function json_decode;
 use function mkdir;
 use function sprintf;
-use function str_replace;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
 use PHPUnit\Runner\Extension\Facade as ExtensionFacade;
@@ -57,12 +58,16 @@ final class Extension implements ExtensionInterface
         assert(is_array($data['then']));
         assert(array_is_list($data['then']));
 
+        $tmp       = explode('\\', $event->test()->className());
+        $className = array_pop($tmp);
+
         file_put_contents(
             sprintf(
-                '%s%s%s.dot',
+                '%s%s%s_%s.dot',
                 $this->targetDirectory,
                 DIRECTORY_SEPARATOR,
-                str_replace(['\\', '::'], '_', $event->test()->id()),
+                $className,
+                $event->test()->methodName(),
             ),
             (new DotRenderer)->render(
                 /** @phpstan-ignore argument.type */
