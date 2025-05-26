@@ -2,9 +2,11 @@
 namespace example\framework\event\test\extension;
 
 use function assert;
+use function explode;
 use function file_get_contents;
 use function implode;
 use function is_string;
+use function mb_strlen;
 use function sprintf;
 use function str_replace;
 
@@ -84,10 +86,27 @@ EOT,
      */
     private function formatLabel(string $label): string
     {
-        return str_replace(
-            ['at price', 'from'],
-            ['\nat price', '\nfrom'],
-            $label,
-        );
+        $words = explode(' ', $label);
+        $lines = [];
+        $line  = '';
+
+        foreach ($words as $word) {
+            if (mb_strlen($line) + mb_strlen($word) > 22) {
+                $lines[] = $line;
+                $line    = '';
+            }
+
+            if ($line === '') {
+                $line = $word;
+
+                continue;
+            }
+
+            $line .= ' ' . $word;
+        }
+
+        $lines[] = $line;
+
+        return implode('\n', $lines);
     }
 }
