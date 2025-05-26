@@ -1,0 +1,35 @@
+strict digraph G {
+    graph [labelloc="t", label="", splines=true, overlap=false, rankdir="LR"];
+    node [shape=box, width=3, height=3, fixedsize=true, style="filled", fontname="Balsamiq Sans", fontsize=18, penwidth=2];
+    ratio = auto;
+
+    subgraph cluster_given {
+        label="Given these events were emitted in the past";
+        style=filled;
+        color=lightgrey;
+        fontname="Balsamiq Sans";
+        fontsize=18;
+        {{{given}}}
+    }
+
+    subgraph cluster_when {
+        label="When this command is processed";
+        style=filled;
+        color=lightgrey;
+        fontname="Balsamiq Sans";
+        fontsize=18;
+
+        command [label="{{{when}}}", fillcolor="#729fcf",color="#3465a4"];
+    }
+
+    subgraph cluster_then {
+        label="Then these events are emitted";
+        style=filled;
+        color=lightgrey;
+        fontname="Balsamiq Sans";
+        fontsize=18;
+        {{{then}}}
+    }
+
+    {{{edges}}} [style=invis];
+}

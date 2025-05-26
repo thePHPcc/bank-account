@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 namespace example\framework\event;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
 use function array_keys;
 use function array_values;
 use function assert;
-use function implode;
-use function sprintf;
-use function str_replace;
+use function json_encode;
 use example\caledonia\application\DispatchingEventEmitter;
 use example\caledonia\application\MarketEventSourcer;
 use example\caledonia\application\ProcessingPurchaseGoodCommandProcessor;
@@ -26,44 +26,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class EventTestCase extends TestCase
 {
-    private const string DOT_TEMPLATE = <<<'EOT'
-strict digraph G {
-    graph [labelloc="t", label="", splines=true, overlap=false, rankdir="LR"];
-    node [shape=box, width=3, height=3, fixedsize=true, style="filled", fontname="Balsamiq Sans", fontsize=18, penwidth=2];
-    ratio = auto;
-
-    subgraph cluster_given {
-        label="Given these events were emitted in the past";
-        style=filled;
-        color=lightgrey;
-        fontname="Balsamiq Sans";
-        fontsize=18;
-{{{given}}}
-    }
-
-    subgraph cluster_when {
-        label="When this command is processed";
-        style=filled;
-        color=lightgrey;
-        fontname="Balsamiq Sans";
-        fontsize=18;
-
-        command [label="{{{when}}}", fillcolor="#729fcf",color="#3465a4"];
-    }
-
-    subgraph cluster_then {
-        label="Then these events are emitted";
-        style=filled;
-        color=lightgrey;
-        fontname="Balsamiq Sans";
-        fontsize=18;
-{{{then}}}
-    }
-
-    {{{edges}}} [style=invis];
-}
-
-EOT;
     private EventReader&Stub $reader;
     private MarketEventSourcer $sourcer;
     private DispatchingEventEmitter $emitter;
@@ -135,7 +97,16 @@ EOT;
             $this->then[] = $event->asString();
         }
 
-        $this->provideGraphViz();
+        $this->provideAdditionalInformation(
+            json_encode(
+                [
+                    'given' => $this->given,
+                    'when'  => $this->when,
+                    'then'  => $this->then,
+                ],
+                JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT,
+            ),
+        );
     }
 
     /**
@@ -190,74 +161,6 @@ EOT;
             (array) $expected,
             (array) $actual,
             ["\0example\\framework\\event\\Event\0id"],
-        );
-    }
-
-    private function provideGraphViz(): void
-    {
-        $edges = [];
-        $given = '';
-
-        foreach ($this->given as $index => $label) {
-            $given .= sprintf(
-                <<<'EOT'
-
-        given_%d [label="%s", fillcolor="#fcaf3e",color="#f57900"];
-EOT,
-                $index + 1,
-                $this->formatLabel($label),
-            );
-
-            $edges[] = sprintf('given_%d', $index + 1);
-        }
-
-        $edges[] = 'command';
-        $then    = '';
-
-        foreach ($this->then as $index => $label) {
-            $then .= sprintf(
-                <<<'EOT'
-
-        then_%d [label="%s", fillcolor="#fcaf3e",color="#f57900"];
-EOT,
-                $index + 1,
-                $this->formatLabel($label),
-            );
-
-            $edges[] = sprintf('then_%d', $index + 1);
-        }
-
-        $this->provideAdditionalInformation(
-            /** @phpstan-ignore argument.type */
-            str_replace(
-                [
-                    '{{{given}}}',
-                    '{{{when}}}',
-                    '{{{then}}}',
-                    '{{{edges}}}',
-                ],
-                [
-                    $given,
-                    $this->when,
-                    $then,
-                    implode(' -> ', $edges),
-                ],
-                self::DOT_TEMPLATE,
-            ),
-        );
-    }
-
-    /**
-     * @param non-empty-string $label
-     *
-     * @return non-empty-string
-     */
-    private function formatLabel(string $label): string
-    {
-        return str_replace(
-            ['at price', 'from'],
-            ['\nat price', '\nfrom'],
-            $label,
         );
     }
 }

@@ -2,9 +2,14 @@
 namespace example\framework\event\test\extension;
 
 use const DIRECTORY_SEPARATOR;
+use const JSON_THROW_ON_ERROR;
+use function array_is_list;
 use function assert;
 use function file_put_contents;
+use function is_array;
 use function is_dir;
+use function is_string;
+use function json_decode;
 use function mkdir;
 use function sprintf;
 use function str_replace;
@@ -40,6 +45,18 @@ final class Extension implements ExtensionInterface
 
     public function testProvidedAdditionalInformation(AdditionalInformationProvided $event): void
     {
+        $data = json_decode($event->additionalInformation(), true, flags: JSON_THROW_ON_ERROR);
+
+        assert(is_array($data));
+        assert(isset($data['given']));
+        assert(is_array($data['given']));
+        assert(array_is_list($data['given']));
+        assert(isset($data['when']));
+        assert(is_string($data['when']));
+        assert(isset($data['then']));
+        assert(is_array($data['then']));
+        assert(array_is_list($data['then']));
+
         file_put_contents(
             sprintf(
                 '%s%s%s.dot',
@@ -47,7 +64,14 @@ final class Extension implements ExtensionInterface
                 DIRECTORY_SEPARATOR,
                 str_replace(['\\', '::'], '_', $event->test()->id()),
             ),
-            $event->additionalInformation(),
+            (new DotRenderer)->render(
+                /** @phpstan-ignore argument.type */
+                $data['given'],
+                /** @phpstan-ignore argument.type */
+                $data['when'],
+                /** @phpstan-ignore argument.type */
+                $data['then'],
+            ),
         );
     }
 
