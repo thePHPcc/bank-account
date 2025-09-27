@@ -1,59 +1,63 @@
 {
-    "$schema": "https://raw.githubusercontent.com/infection/infection/0.29.14/resources/schema.json",
-    "testFramework":"phpunit",
-    "phpUnit": {
-        "customPath": "tools/phpunit"
+  "$schema": "https://raw.githubusercontent.com/infection/infection/0.31.1/resources/schema.json",
+  "phpUnit": {
+    "customPath": "tools/phpunit"
+  },
+  "staticAnalysisTool": "phpstan",
+  "phpStan": {
+    "customPath": "tools/phpstan"
+  },
+  "threads": "max",
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "mutators": {
+    "@default": true,
+    "@regex": {
+      "ignore": [
+        "example\\framework\\library\\Uuid::ensureIsValidUuid"
+      ]
     },
-    "source": {
-        "directories": [
-            "src"
-        ]
+    "CastString": {
+      "ignore": [
+        "example\\caledonia\\application\\MarketHtmlProjector::project"
+      ]
     },
-    "mutators": {
-        "@default": true,
-        "@regex": {
-            "ignore": [
-                "example\\framework\\library\\Uuid::ensureIsValidUuid"
-            ]
-        },
-        "CastString": {
-            "ignore": [
-                "example\\caledonia\\application\\MarketHtmlProjector::project"
-            ]
-        },
-        "DecrementInteger": {
-            "ignore": [
-                "example\\caledonia\\domain\\Market::create",
-                "example\\framework\\event\\ReadEventsStatement::execute"
-            ]
-        },
-        "IncrementInteger": {
-            "ignore": [
-                "example\\framework\\event\\ReadEventsStatement::execute"
-            ]
-        },
-        "InstanceOf_": {
-            "ignore": [
-                "example\\caledonia\\application\\MarketEventSourcer::source"
-            ]
-        },
-        "LessThan": {
-            "ignore": [
-                "example\\caledonia\\domain\\PriceChangedEvent::asString"
-            ]
-        },
-        "LogicalOrAllSubExprNegation": {
-            "ignore": [
-                "example\\caledonia\\application\\MarketEventSourcer::source"
-            ]
-        },
-        "ProtectedVisibility": {
-            "ignore": [
-                "example\\framework\\http\\GetRequest::__construct",
-                "example\\framework\\http\\PostRequest::__construct"
-            ]
-        }
+    "DecrementInteger": {
+      "ignore": [
+        "example\\caledonia\\domain\\Market::create",
+        "example\\framework\\event\\ReadEventsStatement::execute"
+      ]
     },
-    "minMsi": 100,
-    "minCoveredMsi": 100
+    "IncrementInteger": {
+      "ignore": [
+        "example\\framework\\event\\ReadEventsStatement::execute"
+      ]
+    },
+    "InstanceOf_": {
+      "ignore": [
+        "example\\caledonia\\application\\MarketEventSourcer::source"
+      ]
+    },
+    "LessThan": {
+      "ignore": [
+        "example\\caledonia\\domain\\PriceChangedEvent::asString"
+      ]
+    },
+    "LogicalOrAllSubExprNegation": {
+      "ignore": [
+        "example\\caledonia\\application\\MarketEventSourcer::source"
+      ]
+    },
+    "ProtectedVisibility": {
+      "ignore": [
+        "example\\framework\\http\\GetRequest::__construct",
+        "example\\framework\\http\\PostRequest::__construct"
+      ]
+    }
+  },
+  "minMsi": 100,
+  "minCoveredMsi": 100
 }

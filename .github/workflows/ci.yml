@@ -429,4 +429,4 @@ jobs:
         run: php -S 127.0.0.1:8080 -t public &
 
       - name: Perform mutation testing with Infection
-        run: ./tools/infection --threads=max --ignore-msi-with-no-mutations --only-covered
+        run: ./tools/infection
