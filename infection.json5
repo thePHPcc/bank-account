@@ -3,10 +3,6 @@
   "phpUnit": {
     "customPath": "tools/phpunit"
   },
-  "staticAnalysisTool": "phpstan",
-  "phpStan": {
-    "customPath": "tools/phpstan"
-  },
   "threads": "max",
   "source": {
     "directories": [
