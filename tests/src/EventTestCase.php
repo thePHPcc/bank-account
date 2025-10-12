@@ -32,13 +32,17 @@ abstract class EventTestCase extends TestCase
     private CollectingEventDispatcher $dispatcher;
 
     /**
-     * @var list<non-empty-string>
+     * @var list<array{className: class-string, description: non-empty-string}>
      */
     private array $given = [];
-    private string $when;
 
     /**
-     * @var list<non-empty-string>
+     * @var array{className: class-string, description: non-empty-string}
+     */
+    private array $when;
+
+    /**
+     * @var list<array{className: class-string, description: non-empty-string}>
      */
     private array $then = [];
 
@@ -64,7 +68,10 @@ abstract class EventTestCase extends TestCase
             ->willReturn($events);
 
         foreach ($events as $event) {
-            $this->given[] = $event->asString();
+            $this->given[] = [
+                'className'   => $event::class,
+                'description' => $event->asString(),
+            ];
         }
     }
 
@@ -74,7 +81,10 @@ abstract class EventTestCase extends TestCase
 
         $processor->process($command);
 
-        $this->when = $command->asString();
+        $this->when = [
+            'className'   => $command::class,
+            'description' => $command->asString(),
+        ];
     }
 
     final protected function then(Event ...$events): void
@@ -94,7 +104,10 @@ abstract class EventTestCase extends TestCase
         }
 
         foreach ($events as $event) {
-            $this->then[] = $event->asString();
+            $this->then[] = [
+                'className'   => $event::class,
+                'description' => $event->asString(),
+            ];
         }
 
         $this->provideAdditionalInformation(
