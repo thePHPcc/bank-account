@@ -42,12 +42,12 @@ final class Extension implements ExtensionInterface
     /**
      * @var array<class-string, array{uses: list<class-string>, emits: list<class-string>}>
      */
-    private array $commands;
+    private array $commands = [];
 
     /**
      * @var list<array{test: TestMethod, given: list<non-empty-string>, when: non-empty-string, then: list<non-empty-string>}>
      */
-    private array $tests;
+    private array $tests = [];
 
     public function bootstrap(Configuration $configuration, ExtensionFacade $facade, ParameterCollection $parameters): void
     {
