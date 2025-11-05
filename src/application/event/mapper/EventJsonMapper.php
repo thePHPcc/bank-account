@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 use example\framework\event\EventJsonMapper as FrameworkEventJsonMapper;
 
@@ -14,9 +14,10 @@ trait EventJsonMapper
     {
         return new FrameworkEventJsonMapper(
             [
-                'market.good-purchased' => new GoodPurchasedJsonMapper,
-                'market.good-sold'      => new GoodSoldJsonMapper,
-                'market.price-changed'  => new PriceChangedJsonMapper,
+                'banking.account-opened'  => new AccountOpenedJsonMapper,
+                'banking.account-closed'  => new AccountClosedJsonMapper,
+                'banking.money-deposited' => new MoneyDepositedJsonMapper,
+                'banking.money-withdrawn' => new MoneyWithdrawnJsonMapper,
             ],
         );
     }

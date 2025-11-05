@@ -1,13 +1,11 @@
-# Testable Database Interaction
+# From Events to Insights
 ## Sebastian Bergmann
 
-> Designing software systems and writing code is much easier when you do not have to process input, produce output, or interact with other systems such as database servers. It would also be pretty boring.
+> In modern architectures, loosely coupled subsystems collaborate via events rather than giving each other direct instructions. This is referred to as event sourcing if the entire state of an application can be reconstructed from these events.
 > 
-> In this presentation, you will learn best practices and see design patterns in action that allow you to interact with your database without going crazy. In other words: you will learn how to implement testable database interaction and how to test it.
+> I teach you proven strategies and best practices for testing event-based software. Using PHP and PHPUnit as examples, you will see how tests can be implemented to generate visual documentation of event-based software through their execution.
 
-The example application developed in this repository was used, for example ;-), by [Sebastian Bergmann](https://phpunit.expert/?ref=github) in his "[Event-Based Testing](https://phpunit.expert/presentations/event-based-testing.html?ref=github)" and "[Testable Database Interaction](https://phpunit.expert/presentations/testable-database-interaction.html?ref=github)" presentations.
-
-This example application implements a subset of the rules of the boardgame "[Clans of Caledonia](https://karma-games.com/clans-of-caledonia/)" by Juma Al-JouJou.
+The example application developed in this repository is used, for example ;-), by [Sebastian Bergmann](https://phpunit.expert/?ref=github) in his "[From Events to Insights](https://phpunit.expert/presentations/from-events-to-insights.html?ref=github)" presentation.
 
 ### Newsletter
 
@@ -19,4 +17,4 @@ You can unsubscribe at any time.
 
 ---
 
-© 2023-2025 Sebastian Bergmann. All rights reserved.
+© 2025-2026 Sebastian Bergmann. All rights reserved.

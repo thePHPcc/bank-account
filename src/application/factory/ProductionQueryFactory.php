@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 /**
  * @no-named-arguments
@@ -10,8 +10,10 @@ final readonly class ProductionQueryFactory implements QueryFactory
 {
     use EventReading;
 
-    public function createMarketHtmlProjectionReader(): MarketHtmlProjectionReader
+    public function createBankAccountHtmlProjectionReader(): BankAccountProjectionReader
     {
-        return new FilesystemMarketHtmlProjectionReader(__DIR__ . '/../../../projections/market.html');
+        return new FilesystemBankAccountProjectionReader(
+            __DIR__ . '/../../../tests/expectation/bank-account.html',
+        );
     }
 }

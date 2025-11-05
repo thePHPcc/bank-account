@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 use example\framework\http\GetRequestRouter;
 use example\framework\http\Kernel;
@@ -23,7 +23,7 @@ final readonly class ApplicationFactory
     private function createGetRequestRouter(): GetRequestRouter
     {
         return new GetRequestRouter(
-            new MarketRoute($this->createQueryFactory()),
+            new BankAccountRoute($this->createQueryFactory()),
             new NotFoundGetRoute,
         );
     }
@@ -31,8 +31,10 @@ final readonly class ApplicationFactory
     private function createPostRequestRouter(): PostRequestRouter
     {
         return new PostRequestRouter(
-            new PurchaseGoodRoute($this->createCommandFactory()),
-            new SellGoodRoute($this->createCommandFactory()),
+            new OpenAccountRoute($this->createCommandFactory()),
+            new CloseAccountRoute($this->createCommandFactory()),
+            new DepositMoneyRoute($this->createCommandFactory()),
+            new WithdrawMoneyRoute($this->createCommandFactory()),
             new NotFoundPostRoute,
         );
     }

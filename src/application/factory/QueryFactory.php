@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 /**
  * @no-named-arguments
  */
 interface QueryFactory
 {
-    public function createMarketHtmlProjectionReader(): MarketHtmlProjectionReader;
+    public function createBankAccountHtmlProjectionReader(): BankAccountProjectionReader;
 }

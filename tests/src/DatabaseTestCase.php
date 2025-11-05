@@ -22,7 +22,7 @@ abstract class DatabaseTestCase extends TestCase
                 '127.0.0.1',
                 'event_reader',
                 'event_reader_password',
-                'caledonia',
+                'bankaccount',
             );
         } catch (Throwable) {
             $this->markTestSkipped('Could not connect to test database');
@@ -36,7 +36,7 @@ abstract class DatabaseTestCase extends TestCase
                 '127.0.0.1',
                 'event_writer',
                 'event_writer_password',
-                'caledonia',
+                'bankaccount',
             );
         } catch (Throwable) {
             $this->markTestSkipped('Could not connect to test database');
@@ -52,7 +52,7 @@ abstract class DatabaseTestCase extends TestCase
             'host'     => '127.0.0.1',
             'username' => 'test_fixture_manager',
             'password' => 'test_fixture_manager_password',
-            'database' => 'caledonia',
+            'database' => 'bankaccount',
         ];
     }
 

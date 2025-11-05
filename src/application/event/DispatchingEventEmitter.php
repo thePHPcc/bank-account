@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
-use example\caledonia\domain\Good;
-use example\caledonia\domain\GoodPurchasedEvent;
-use example\caledonia\domain\GoodSoldEvent;
-use example\caledonia\domain\Price;
-use example\caledonia\domain\PriceChangedEvent;
+use example\bankaccount\domain\AccountClosedEvent;
+use example\bankaccount\domain\AccountOpenedEvent;
+use example\bankaccount\domain\Money;
+use example\bankaccount\domain\MoneyDepositedEvent;
+use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\framework\event\EventDispatcher;
 use example\framework\library\UuidGenerator;
 
@@ -24,43 +24,51 @@ final readonly class DispatchingEventEmitter implements EventEmitter
     }
 
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $owner
      */
-    public function goodPurchased(Good $good, Price $price, int $amount): void
+    public function accountOpened(string $owner): void
     {
         $this->dispatcher->dispatch(
-            new GoodPurchasedEvent(
+            new AccountOpenedEvent(
                 $this->uuidGenerator->generate(),
-                $good,
-                $price,
-                $amount,
+                $owner,
+            ),
+        );
+    }
+
+    public function accountClosed(): void
+    {
+        $this->dispatcher->dispatch(
+            new AccountClosedEvent(
+                $this->uuidGenerator->generate(),
             ),
         );
     }
 
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $description
      */
-    public function goodSold(Good $good, Price $price, int $amount): void
+    public function moneyDeposited(Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
-            new GoodSoldEvent(
+            new MoneyDepositedEvent(
                 $this->uuidGenerator->generate(),
-                $good,
-                $price,
                 $amount,
+                $description,
             ),
         );
     }
 
-    public function priceChanged(Good $good, Price $old, Price $new): void
+    /**
+     * @param non-empty-string $description
+     */
+    public function moneyWithdrawn(Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
-            new PriceChangedEvent(
+            new MoneyWithdrawnEvent(
                 $this->uuidGenerator->generate(),
-                $good,
-                $old,
-                $new,
+                $amount,
+                $description,
             ),
         );
     }

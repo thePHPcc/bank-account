@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
-use example\caledonia\domain\Good;
-use example\caledonia\domain\Price;
+use example\bankaccount\domain\Money;
 
 /**
  * @no-named-arguments
@@ -10,14 +9,19 @@ use example\caledonia\domain\Price;
 interface EventEmitter
 {
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $owner
      */
-    public function goodPurchased(Good $good, Price $price, int $amount): void;
+    public function accountOpened(string $owner): void;
+
+    public function accountClosed(): void;
 
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $description
      */
-    public function goodSold(Good $good, Price $price, int $amount): void;
+    public function moneyDeposited(Money $amount, string $description): void;
 
-    public function priceChanged(Good $good, Price $old, Price $new): void;
+    /**
+     * @param non-empty-string $description
+     */
+    public function moneyWithdrawn(Money $amount, string $description): void;
 }

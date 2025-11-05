@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\domain;
+namespace example\bankaccount\domain;
 
 /**
  * @no-named-arguments

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="caledonia">
+<project name="bank-account">
     <target name="install-dependencies" description="Install dependencies with Composer">
         <exec executable="${basedir}/tools/composer" taskname="composer">
             <arg value="install"/>

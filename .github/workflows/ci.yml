@@ -239,12 +239,6 @@ jobs:
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-ansi --no-interaction --no-progress
 
-      - name: Create directory for projections
-        run: mkdir projections
-
-      - name: Create projection
-        run: ./bin/project.php projections/market.html
-
       - name: Run edge-to-edge tests with PHPUnit
         run: ./tools/phpunit --testsuite edge-to-edge
 
@@ -291,12 +285,6 @@ jobs:
 
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-ansi --no-interaction --no-progress
-
-      - name: Create directory for projections
-        run: mkdir projections
-
-      - name: Create projection
-        run: ./bin/project.php projections/market.html
 
       - name: Start PHP built-in server
         run: php -S 127.0.0.1:8080 -t public &
@@ -347,12 +335,6 @@ jobs:
 
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-ansi --no-interaction --no-progress
-
-      - name: Create directory for projections
-        run: mkdir projections
-
-      - name: Create projection
-        run: ./bin/project.php projections/market.html
 
       - name: Start PHP built-in server
         run: php -S 127.0.0.1:8080 -t public &
@@ -419,12 +401,6 @@ jobs:
 
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-ansi --no-interaction --no-progress
-
-      - name: Create directory for projections
-        run: mkdir projections
-
-      - name: Create projection
-        run: ./bin/project.php projections/market.html
 
       - name: Start PHP built-in server
         run: php -S 127.0.0.1:8080 -t public &

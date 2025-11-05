@@ -9,6 +9,7 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = new PhpCsFixer\Config;
 $config->setFinder($finder)
+    ->setUnsupportedPhpVersionAllowed(true)
     ->setRiskyAllowed(true)
     ->setRules([
         'align_multiline_comment' => true,
@@ -138,6 +139,7 @@ $config->setFinder($finder)
             ],
         ],
         'native_type_declaration_casing' => true,
+        'new_expression_parentheses' => true,
         'new_with_parentheses' => [
             'anonymous_class' => false,
             'named_class' => false,

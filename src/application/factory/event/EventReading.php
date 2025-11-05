@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 use example\framework\event\DatabaseEventReader;
 use example\framework\event\EventReader;
@@ -14,9 +14,9 @@ trait EventReading
 {
     use EventJsonMapper;
 
-    public function createMarketEventSourcer(): MarketEventSourcer
+    public function createBankAccountEventSourcer(): BankAccountEventSourcer
     {
-        return new MarketEventSourcer(
+        return new BankAccountEventSourcer(
             $this->createEventReader(),
         );
     }
@@ -35,7 +35,7 @@ trait EventReading
             '127.0.0.1',
             'event_reader',
             'event_reader_password',
-            'caledonia',
+            'bankaccount',
         );
     }
 }

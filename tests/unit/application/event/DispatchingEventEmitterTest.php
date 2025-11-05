@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
-use example\caledonia\domain\Good;
-use example\caledonia\domain\GoodPurchasedEvent;
-use example\caledonia\domain\GoodSoldEvent;
-use example\caledonia\domain\Price;
-use example\caledonia\domain\PriceChangedEvent;
+use example\bankaccount\domain\AccountClosedEvent;
+use example\bankaccount\domain\AccountOpenedEvent;
+use example\bankaccount\domain\Currency;
+use example\bankaccount\domain\Money;
+use example\bankaccount\domain\MoneyDepositedEvent;
+use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\framework\event\EventDispatcher;
 use example\framework\library\Uuid;
 use example\framework\library\UuidGenerator;
@@ -19,10 +20,12 @@ use PHPUnit\Framework\TestCase;
 
 #[TestDox('DispatchingEventEmitter')]
 #[CoversClass(DispatchingEventEmitter::class)]
-#[UsesClass(GoodPurchasedEvent::class)]
-#[UsesClass(GoodSoldEvent::class)]
-#[UsesClass(PriceChangedEvent::class)]
-#[UsesClass(Price::class)]
+#[UsesClass(AccountOpenedEvent::class)]
+#[UsesClass(AccountClosedEvent::class)]
+#[UsesClass(MoneyDepositedEvent::class)]
+#[UsesClass(MoneyWithdrawnEvent::class)]
+#[UsesClass(Money::class)]
+#[UsesClass(Currency::class)]
 #[UsesClass(Uuid::class)]
 #[Small]
 final class DispatchingEventEmitterTest extends TestCase
@@ -42,93 +45,108 @@ final class DispatchingEventEmitterTest extends TestCase
         );
     }
 
-    #[TestDox('goodPurchased() emits GoodPurchased event')]
-    public function testGoodPurchasedDispatchesGoodPurchasedEvent(): void
+    #[TestDox('accountOpened() emits AccountOpened event')]
+    public function testAccountOpenedDispatchesAccountOpenedEvent(): void
     {
-        $uuid = Uuid::from('09925df9-0742-4980-aa70-16105a05a94f');
+        $uuid = Uuid::from('e3890992-beb0-43a6-a2ab-4fc583cc4693');
 
         $this
             ->uuidGenerator
             ->method('generate')
             ->willReturn($uuid);
 
-        $good   = Good::Bread;
-        $price  = Price::from(1);
-        $amount = 2;
+        $owner = 'the-owner';
 
         $this
             ->dispatcher
             ->expects($this->once())
             ->method('dispatch')
             ->with(
-                new GoodPurchasedEvent(
+                new AccountOpenedEvent(
                     $uuid,
-                    $good,
-                    $price,
-                    $amount,
+                    $owner,
                 ),
             );
 
-        $this->emitter->goodPurchased($good, $price, $amount);
+        $this->emitter->accountOpened($owner);
     }
 
-    #[TestDox('goodSold() emits GoodSold event')]
-    public function testGoodSoldDispatchesGoodSoldEvent(): void
+    #[TestDox('accountClosed() emits AccountClosed event')]
+    public function testAccountClosedDispatchesAccountClosedEvent(): void
     {
-        $uuid = Uuid::from('6a19963d-de6f-47b4-8a66-95e3c54308d9');
+        $uuid = Uuid::from('6ebf72d7-9eaa-4e23-a79e-398a65d384bb');
 
         $this
             ->uuidGenerator
             ->method('generate')
             ->willReturn($uuid);
 
-        $good   = Good::Bread;
-        $price  = Price::from(1);
-        $amount = 2;
-
         $this
             ->dispatcher
             ->expects($this->once())
             ->method('dispatch')
             ->with(
-                new GoodSoldEvent(
+                new AccountClosedEvent(
                     $uuid,
-                    $good,
-                    $price,
-                    $amount,
                 ),
             );
 
-        $this->emitter->goodSold($good, $price, $amount);
+        $this->emitter->accountClosed();
     }
 
-    #[TestDox('priceChanged() emits PriceChanged event')]
-    public function testPriceChangedDispatchesPriceChangedEvent(): void
+    #[TestDox('moneyDeposited() emits MoneyDeposited event')]
+    public function testMoneyDepositedDispatchesMoneyDepositedEvent(): void
     {
-        $uuid = Uuid::from('d32e54d2-3d68-4296-b28f-8e827cc42142');
+        $uuid = Uuid::from('3ad4ff02-5bef-48b4-b61f-d60abd608e78');
 
         $this
             ->uuidGenerator
             ->method('generate')
             ->willReturn($uuid);
 
-        $good     = Good::Bread;
-        $oldPrice = Price::from(1);
-        $newPrice = Price::from(2);
+        $amount      = Money::from(123, Currency::from('EUR'));
+        $description = 'the-description';
 
         $this
             ->dispatcher
             ->expects($this->once())
             ->method('dispatch')
             ->with(
-                new PriceChangedEvent(
+                new MoneyDepositedEvent(
                     $uuid,
-                    $good,
-                    $oldPrice,
-                    $newPrice,
+                    $amount,
+                    $description,
                 ),
             );
 
-        $this->emitter->priceChanged($good, $oldPrice, $newPrice);
+        $this->emitter->moneyDeposited($amount, $description);
+    }
+
+    #[TestDox('moneyWithdrawn() emits MoneyWithdrawn event')]
+    public function testMoneyWithdrawnDispatchesMoneyWithdrawnEvent(): void
+    {
+        $uuid = Uuid::from('07550574-22f9-447e-ac1e-6849bcc6c229');
+
+        $this
+            ->uuidGenerator
+            ->method('generate')
+            ->willReturn($uuid);
+
+        $amount      = Money::from(123, Currency::from('EUR'));
+        $description = 'the-description';
+
+        $this
+            ->dispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                new MoneyWithdrawnEvent(
+                    $uuid,
+                    $amount,
+                    $description,
+                ),
+            );
+
+        $this->emitter->moneyWithdrawn($amount, $description);
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "thephpcc/caledonia",
+    "name": "thephpcc/bank-account",
     "description": "Example application used in presentations by Sebastian Bergmann",
     "type": "project",
     "license": "proprietary",
@@ -12,13 +12,14 @@
     ],
     "config": {
         "platform": {
-            "php": "8.4.4"
+            "php": "8.4.14"
         },
         "optimize-autoloader": true,
         "sort-packages": true
     },
     "require": {
         "php": ">=8.4",
+        "ext-intl": "*",
         "ext-mysqli": "*"
     },
     "require-dev": {

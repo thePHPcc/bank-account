@@ -20,35 +20,14 @@
         "example\\framework\\library\\Uuid::ensureIsValidUuid"
       ]
     },
-    "CastString": {
-      "ignore": [
-        "example\\caledonia\\application\\MarketHtmlProjector::project"
-      ]
-    },
     "DecrementInteger": {
       "ignore": [
-        "example\\caledonia\\domain\\Market::create",
         "example\\framework\\event\\ReadEventsStatement::execute"
       ]
     },
     "IncrementInteger": {
       "ignore": [
         "example\\framework\\event\\ReadEventsStatement::execute"
-      ]
-    },
-    "InstanceOf_": {
-      "ignore": [
-        "example\\caledonia\\application\\MarketEventSourcer::source"
-      ]
-    },
-    "LessThan": {
-      "ignore": [
-        "example\\caledonia\\domain\\PriceChangedEvent::asString"
-      ]
-    },
-    "LogicalOrAllSubExprNegation": {
-      "ignore": [
-        "example\\caledonia\\application\\MarketEventSourcer::source"
       ]
     },
     "ProtectedVisibility": {

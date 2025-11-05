@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 use example\framework\event\DatabaseEventWriter;
 use example\framework\event\EventWriter;
@@ -41,7 +41,7 @@ trait EventWriting
             '127.0.0.1',
             'event_writer',
             'event_writer_password',
-            'caledonia',
+            'bankaccount',
         );
     }
 }

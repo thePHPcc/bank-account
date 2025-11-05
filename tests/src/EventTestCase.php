@@ -7,19 +7,26 @@ use function array_keys;
 use function array_values;
 use function assert;
 use function json_encode;
-use example\caledonia\application\DispatchingEventEmitter;
-use example\caledonia\application\MarketEventSourcer;
-use example\caledonia\application\ProcessingPurchaseGoodCommandProcessor;
-use example\caledonia\application\ProcessingSellGoodCommandProcessor;
-use example\caledonia\application\PurchaseGoodCommandProcessor;
-use example\caledonia\application\SellGoodCommandProcessor;
-use example\caledonia\domain\Good;
-use example\caledonia\domain\GoodPurchasedEvent;
-use example\caledonia\domain\GoodSoldEvent;
-use example\caledonia\domain\Price;
-use example\caledonia\domain\PriceChangedEvent;
-use example\caledonia\domain\PurchaseGoodCommand;
-use example\caledonia\domain\SellGoodCommand;
+use example\bankaccount\application\BankAccountEventSourcer;
+use example\bankaccount\application\CloseAccountCommandProcessor;
+use example\bankaccount\application\DepositMoneyCommandProcessor;
+use example\bankaccount\application\DispatchingEventEmitter;
+use example\bankaccount\application\OpenAccountCommandProcessor;
+use example\bankaccount\application\ProcessingCloseAccountCommandProcessor;
+use example\bankaccount\application\ProcessingDepositMoneyCommandProcessor;
+use example\bankaccount\application\ProcessingOpenAccountCommandProcessor;
+use example\bankaccount\application\ProcessingWithdrawMoneyCommandProcessor;
+use example\bankaccount\application\WithdrawMoneyCommandProcessor;
+use example\bankaccount\domain\AccountClosedEvent;
+use example\bankaccount\domain\AccountOpenedEvent;
+use example\bankaccount\domain\CloseAccountCommand;
+use example\bankaccount\domain\Command;
+use example\bankaccount\domain\DepositMoneyCommand;
+use example\bankaccount\domain\Money;
+use example\bankaccount\domain\MoneyDepositedEvent;
+use example\bankaccount\domain\MoneyWithdrawnEvent;
+use example\bankaccount\domain\OpenAccountCommand;
+use example\bankaccount\domain\WithdrawMoneyCommand;
 use example\framework\library\RandomUuidGenerator;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +34,7 @@ use PHPUnit\Framework\TestCase;
 abstract class EventTestCase extends TestCase
 {
     private EventReader&Stub $reader;
-    private MarketEventSourcer $sourcer;
+    private BankAccountEventSourcer $sourcer;
     private DispatchingEventEmitter $emitter;
     private CollectingEventDispatcher $dispatcher;
 
@@ -49,7 +56,7 @@ abstract class EventTestCase extends TestCase
     final protected function setUp(): void
     {
         $this->reader     = $this->createStub(EventReader::class);
-        $this->sourcer    = new MarketEventSourcer($this->reader);
+        $this->sourcer    = new BankAccountEventSourcer($this->reader);
         $this->dispatcher = new CollectingEventDispatcher;
 
         $this->emitter = new DispatchingEventEmitter(
@@ -75,7 +82,7 @@ abstract class EventTestCase extends TestCase
         }
     }
 
-    final protected function when(PurchaseGoodCommand|SellGoodCommand $command): void
+    final protected function when(CloseAccountCommand|DepositMoneyCommand|OpenAccountCommand|WithdrawMoneyCommand $command): void
     {
         $processor = $this->processorFor($command);
 
@@ -123,46 +130,55 @@ abstract class EventTestCase extends TestCase
     }
 
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $owner
      */
-    final protected function goodPurchased(Good $good, Price $price, int $amount): GoodPurchasedEvent
+    final protected function accountOpened(string $owner): AccountOpenedEvent
     {
-        return new GoodPurchasedEvent(
+        return new AccountOpenedEvent(
             (new RandomUuidGenerator)->generate(),
-            $good,
-            $price,
-            $amount,
+            $owner,
+        );
+    }
+
+    final protected function accountClosed(): AccountClosedEvent
+    {
+        return new AccountClosedEvent(
+            (new RandomUuidGenerator)->generate(),
         );
     }
 
     /**
-     * @param positive-int $amount
+     * @param non-empty-string $description
      */
-    final protected function goodSold(Good $good, Price $price, int $amount): GoodSoldEvent
+    final protected function moneyDeposited(Money $amount, string $description): MoneyDepositedEvent
     {
-        return new GoodSoldEvent(
+        return new MoneyDepositedEvent(
             (new RandomUuidGenerator)->generate(),
-            $good,
-            $price,
             $amount,
+            $description,
         );
     }
 
-    final protected function priceChanged(Good $good, Price $old, Price $new): PriceChangedEvent
+    /**
+     * @param non-empty-string $description
+     */
+    final protected function moneyWithdrawn(Money $amount, string $description): MoneyWithdrawnEvent
     {
-        return new PriceChangedEvent(
+        return new MoneyWithdrawnEvent(
             (new RandomUuidGenerator)->generate(),
-            $good,
-            $old,
-            $new,
+            $amount,
+            $description,
         );
     }
 
-    private function processorFor(PurchaseGoodCommand|SellGoodCommand $command): PurchaseGoodCommandProcessor|SellGoodCommandProcessor
+    private function processorFor(Command $command): CloseAccountCommandProcessor|DepositMoneyCommandProcessor|OpenAccountCommandProcessor|WithdrawMoneyCommandProcessor
     {
+        /** @phpstan-ignore match.unhandled */
         return match ($command::class) {
-            PurchaseGoodCommand::class => new ProcessingPurchaseGoodCommandProcessor($this->emitter, $this->sourcer),
-            SellGoodCommand::class     => new ProcessingSellGoodCommandProcessor($this->emitter, $this->sourcer),
+            OpenAccountCommand::class   => new ProcessingOpenAccountCommandProcessor($this->emitter),
+            CloseAccountCommand::class  => new ProcessingCloseAccountCommandProcessor($this->sourcer, $this->emitter),
+            DepositMoneyCommand::class  => new ProcessingDepositMoneyCommandProcessor($this->sourcer, $this->emitter),
+            WithdrawMoneyCommand::class => new ProcessingWithdrawMoneyCommandProcessor($this->sourcer, $this->emitter),
         };
     }
 

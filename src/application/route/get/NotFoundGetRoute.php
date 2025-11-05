@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace example\caledonia\application;
+namespace example\bankaccount\application;
 
 use example\framework\http\GetRequest;
 use example\framework\http\GetRequestRoute;
