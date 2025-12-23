@@ -4,6 +4,7 @@ namespace example\bankaccount\application;
 use function assert;
 use function defined;
 use function file_get_contents;
+use function http_get_last_response_headers;
 use function is_string;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Large;
@@ -44,9 +45,13 @@ final class BankAccountEndToEndTest extends TestCase
             $this->markTestSkipped('Could not connect to ' . TEST_WEB_SERVER_BASE_URL);
         }
 
+        $headers = http_get_last_response_headers();
+
+        assert($headers !== null);
+
         return [
             'body'    => $body,
-            'headers' => $http_response_header,
+            'headers' => $headers,
         ];
     }
 }
