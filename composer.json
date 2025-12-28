@@ -23,6 +23,7 @@
         "ext-mysqli": "*"
     },
     "require-dev": {
+        "giorgiosironi/eris": "^1.0",
         "sebastian/csv-parser": "^2.0.0",
         "sebastian/mysqli-wrapper": "^2.0.0",
         "sebastian/uuid": "^1.0.2"
