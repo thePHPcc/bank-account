@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(MoneyWithdrawnEvent::class)]
 #[UsesClass(Uuid::class)]
 #[Small]
-final class BankAccountEventSourceTest extends TestCase
+final class BankAccountEventSourcerTest extends TestCase
 {
     public function testSourcesBankAccountFromEvents(): void
     {
