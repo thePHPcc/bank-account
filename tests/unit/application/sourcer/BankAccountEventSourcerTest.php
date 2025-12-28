@@ -32,6 +32,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AccountOpenedEvent::class)]
 #[UsesClass(MoneyDepositedEvent::class)]
 #[UsesClass(MoneyWithdrawnEvent::class)]
+#[UsesClass(RandomUuidGenerator::class)]
 #[UsesClass(Uuid::class)]
 #[Small]
 #[TestDox('BankAccountEventSourcer')]
