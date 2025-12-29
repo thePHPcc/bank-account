@@ -25,17 +25,17 @@ final class ProcessingWithdrawMoneyCommandProcessorTest extends TestCase
         $amount      = Money::from(123, Currency::from('EUR'));
         $description = 'the-description';
 
+        $bankAccount = BankAccount::from(
+            'the-owner',
+            Money::from(123, Currency::from('EUR')),
+            true,
+        );
+
         $sourcer = $this->createStub(BankAccountSourcer::class);
 
         $sourcer
             ->method('source')
-            ->willReturn(
-                BankAccount::from(
-                    'the-owner',
-                    Money::from(0, Currency::from('EUR')),
-                    true,
-                ),
-            );
+            ->willReturn($bankAccount);
 
         $emitter = $this->createMock(EventEmitter::class);
 
