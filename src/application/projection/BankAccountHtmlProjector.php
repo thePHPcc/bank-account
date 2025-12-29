@@ -93,9 +93,9 @@ final readonly class BankAccountHtmlProjector
             ],
             [
                 $description,
-                $amount->amount() >= 0 ? '#000000' : '#ff0000',
+                $amount->isPositive() ? '#000000' : '#ff0000',
                 $formatter->format($amount),
-                $balance->amount() >= 0 ? '#000000' : '#ff0000',
+                $balance->isPositive() ? '#000000' : '#ff0000',
                 $formatter->format($balance),
             ],
             $this->rowTemplate(),
