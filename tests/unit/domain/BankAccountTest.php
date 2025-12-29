@@ -69,6 +69,28 @@ final class BankAccountTest extends TestCase
         $bankAccount->close();
     }
 
+    public function testMoneyCannotBeDepositedIntoClosedAccount(): void
+    {
+        $bankAccount = $this->bankAccount();
+
+        $bankAccount->close();
+
+        $this->expectException(AccountIsClosedException::class);
+
+        $bankAccount->deposit(Money::from(123, Currency::from('EUR')));
+    }
+
+    public function testMoneyCannotBeWithdrawnFromClosedAccount(): void
+    {
+        $bankAccount = $this->bankAccount();
+
+        $bankAccount->close();
+
+        $this->expectException(AccountIsClosedException::class);
+
+        $bankAccount->withdraw(Money::from(123, Currency::from('EUR')));
+    }
+
     public function testPositiveAmountOfNotMatchingCurrencyCannotBeDeposited(): void
     {
         $bankAccount = $this->bankAccount();
