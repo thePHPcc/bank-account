@@ -23,7 +23,7 @@ final class BankAccountTest extends TestCase
 
     public function testHasBalance(): void
     {
-        $this->assertEquals($this->amount(), $this->bankAccount()->balance());
+        $this->assertObjectEquals($this->amount(), $this->bankAccount()->balance());
     }
 
     public function testIsInitiallyActive(): void
