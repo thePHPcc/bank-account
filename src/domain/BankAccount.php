@@ -92,8 +92,10 @@ final class BankAccount
      */
     private function ensureAmountIsPositive(Money $amount): void
     {
-        if ($amount->amount() <= 0) {
-            throw new AmountMustBePositiveException;
+        if ($amount->isPositive()) {
+            return;
         }
+
+        throw new AmountMustBePositiveException;
     }
 }
