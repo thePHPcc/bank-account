@@ -87,6 +87,9 @@ final class BankAccount
         }
     }
 
+    /**
+     * @throws AmountMustBePositiveException
+     */
     private function ensureAmountIsPositive(Money $amount): void
     {
         if ($amount->amount() <= 0) {
