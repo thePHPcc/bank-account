@@ -12,13 +12,13 @@
     ],
     "config": {
         "platform": {
-            "php": "8.4.14"
+            "php": "8.5.1"
         },
         "optimize-autoloader": true,
         "sort-packages": true
     },
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "ext-intl": "*",
         "ext-mysqli": "*"
     },
