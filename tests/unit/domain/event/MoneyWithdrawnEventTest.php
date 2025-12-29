@@ -46,6 +46,17 @@ final class MoneyWithdrawnEventTest extends TestCase
         $this->assertSame(self::DESCRIPTION, $this->event()->description());
     }
 
+    public function testAmountMustBePositive(): void
+    {
+        $this->expectException(AmountMustBePositiveException::class);
+
+        new MoneyWithdrawnEvent(
+            new Uuid(self::UUID),
+            Money::from(0, Currency::from(self::CURRENCY_CODE)),
+            self::DESCRIPTION,
+        );
+    }
+
     private function event(): MoneyWithdrawnEvent
     {
         return new MoneyWithdrawnEvent(

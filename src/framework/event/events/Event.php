@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace example\framework\event;
 
+use example\bankaccount\domain\AmountMustBePositiveException;
+use example\bankaccount\domain\Money;
 use example\framework\library\Uuid;
 
 /**
@@ -29,4 +31,16 @@ abstract readonly class Event
      * @return non-empty-string
      */
     abstract public function asString(): string;
+
+    /**
+     * @throws AmountMustBePositiveException
+     */
+    protected function ensureAmountIsPositive(Money $amount): void
+    {
+        if ($amount->isPositive()) {
+            return;
+        }
+
+        throw new AmountMustBePositiveException;
+    }
 }

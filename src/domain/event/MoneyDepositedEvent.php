@@ -15,9 +15,13 @@ final readonly class MoneyDepositedEvent extends Event
 
     /**
      * @param non-empty-string $description
+     *
+     * @throws AmountMustBePositiveException
      */
     public function __construct(Uuid $id, Money $amount, string $description)
     {
+        $this->ensureAmountIsPositive($amount);
+
         parent::__construct($id);
 
         $this->amount      = $amount;
