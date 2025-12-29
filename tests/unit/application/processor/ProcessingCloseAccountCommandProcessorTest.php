@@ -22,17 +22,17 @@ final class ProcessingCloseAccountCommandProcessorTest extends TestCase
     #[TestDox('Emits an AccountClosed event')]
     public function testEmitsAccountClosedEvent(): void
     {
+        $bankAccount = BankAccount::from(
+            'the-owner',
+            Money::from(0, Currency::from('EUR')),
+            true,
+        );
+
         $sourcer = $this->createStub(BankAccountSourcer::class);
 
         $sourcer
             ->method('source')
-            ->willReturn(
-                BankAccount::from(
-                    'the-owner',
-                    Money::from(0, Currency::from('EUR')),
-                    true,
-                ),
-            );
+            ->willReturn($bankAccount);
 
         $emitter = $this->createMock(EventEmitter::class);
 
