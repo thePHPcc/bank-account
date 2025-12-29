@@ -47,7 +47,7 @@ final class MoneyTest extends TestCase
         $a        = Money::from(1, $currency);
         $b        = Money::from(2, $currency);
 
-        $c = $a->add($b);
+        $c = $a->plus($b);
 
         $this->assertSame(3, $c->amount());
         $this->assertSame($currency, $c->currency());
@@ -59,7 +59,7 @@ final class MoneyTest extends TestCase
         $a        = Money::from(3, $currency);
         $b        = Money::from(2, $currency);
 
-        $c = $a->subtract($b);
+        $c = $a->minus($b);
 
         $this->assertSame(1, $c->amount());
         $this->assertSame($currency, $c->currency());
@@ -72,7 +72,7 @@ final class MoneyTest extends TestCase
 
         $this->expectException(CurrencyMismatchException::class);
 
-        $c = $a->add($b);
+        $c = $a->plus($b);
     }
 
     public function testAnotherMoneyObjectWithDifferentCurrencyCannotBeSubtracted(): void
@@ -82,6 +82,6 @@ final class MoneyTest extends TestCase
 
         $this->expectException(CurrencyMismatchException::class);
 
-        $c = $a->subtract($b);
+        $c = $a->minus($b);
     }
 }

@@ -190,13 +190,13 @@ final class BankAccountEventSourcerTest extends TestCase
 
         foreach ($events as $event) {
             if ($event instanceof MoneyDepositedEvent) {
-                $balance = $balance->add($event->amount());
+                $balance = $balance->plus($event->amount());
 
                 continue;
             }
 
             if ($event instanceof MoneyWithdrawnEvent) {
-                $balance = $balance->subtract($event->amount());
+                $balance = $balance->minus($event->amount());
             }
         }
 

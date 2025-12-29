@@ -37,7 +37,7 @@ final class BankAccount
         $this->ensureAccountIsActive();
         $this->ensureAmountIsPositive($amount);
 
-        $this->balance = $this->balance->add($amount);
+        $this->balance = $this->balance->plus($amount);
     }
 
     /**
@@ -49,7 +49,7 @@ final class BankAccount
         $this->ensureAccountIsActive();
         $this->ensureAmountIsPositive($amount);
 
-        $this->balance = $this->balance->subtract($amount);
+        $this->balance = $this->balance->minus($amount);
     }
 
     /**

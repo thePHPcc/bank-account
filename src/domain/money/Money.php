@@ -34,7 +34,7 @@ final readonly class Money
         return $this->currency;
     }
 
-    public function add(self $other): self
+    public function plus(self $other): self
     {
         $this->ensureSameCurrency($this, $other);
 
@@ -43,7 +43,7 @@ final readonly class Money
         return $this->newMoney($value);
     }
 
-    public function subtract(self $other): self
+    public function minus(self $other): self
     {
         $this->ensureSameCurrency($this, $other);
 

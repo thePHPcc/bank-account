@@ -31,13 +31,13 @@ final readonly class BankAccountHtmlProjector
 
         foreach ($this->reader->topic('banking.money-deposited', 'banking.money-withdrawn') as $event) {
             if ($event instanceof MoneyDepositedEvent) {
-                $balance = $balance->add($event->amount());
+                $balance = $balance->plus($event->amount());
 
                 $rows .= $this->row($event->description(), $event->amount(), $balance);
             }
 
             if ($event instanceof MoneyWithdrawnEvent) {
-                $balance = $balance->subtract($event->amount());
+                $balance = $balance->minus($event->amount());
 
                 $rows .= $this->row($event->description(), $event->amount()->negate(), $balance);
             }
