@@ -27,7 +27,6 @@ abstract readonly class AbstractTransactionRoute implements PostRequestRoute
         assert(is_array($data));
         assert(isset($data['amount']));
         assert(is_int($data['amount']));
-        assert($data['amount'] > 0);
         assert(isset($data['currency']));
         assert(is_string($data['currency']));
         assert(isset($data['currency']));
