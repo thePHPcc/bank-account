@@ -59,5 +59,7 @@ final class ProcessingWithdrawMoneyCommandProcessorTest extends TestCase
         $processor = new ProcessingWithdrawMoneyCommandProcessor($sourcer, $emitter);
 
         $processor->process(new WithdrawMoneyCommand($amount, $description));
+
+        $this->assertObjectEquals(Money::from(0, Currency::from('EUR')), $bankAccount->balance());
     }
 }
