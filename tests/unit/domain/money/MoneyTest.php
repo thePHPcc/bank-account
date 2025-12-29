@@ -108,4 +108,15 @@ final class MoneyTest extends TestCase
 
         $c = $a->minus($b);
     }
+
+    public function testCanBeCompared(): void
+    {
+        $a = Money::from(1, Currency::from('EUR'));
+        $b = Money::from(1, Currency::from('GBP'));
+        $c = Money::from(2, Currency::from('EUR'));
+
+        $this->assertTrue($a->equalTo($a));
+        $this->assertFalse($a->equalTo($b));
+        $this->assertFalse($a->equalTo($c));
+    }
 }
