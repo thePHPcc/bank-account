@@ -59,6 +59,16 @@ final readonly class Money
         return $this->newMoney($value);
     }
 
+    public function isPositive(): bool
+    {
+        return $this->amount > 0;
+    }
+
+    public function isNegative(): bool
+    {
+        return $this->amount < 0;
+    }
+
     private function ensureSameCurrency(self $a, self $b): void
     {
         if (!$a->currency()->equalTo($b->currency())) {

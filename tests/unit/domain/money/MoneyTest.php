@@ -41,6 +41,30 @@ final class MoneyTest extends TestCase
         $this->assertSame(-123, $money->negate()->amount());
     }
 
+    public function testCanHavePositiveAmount(): void
+    {
+        $money = Money::from(123, Currency::from('EUR'));
+
+        $this->assertTrue($money->isPositive());
+        $this->assertFalse($money->isNegative());
+    }
+
+    public function testCanHaveNegativeAmount(): void
+    {
+        $money = Money::from(-123, Currency::from('EUR'));
+
+        $this->assertTrue($money->isNegative());
+        $this->assertFalse($money->isPositive());
+    }
+
+    public function testCanBeZero(): void
+    {
+        $money = Money::from(0, Currency::from('EUR'));
+
+        $this->assertFalse($money->isNegative());
+        $this->assertFalse($money->isPositive());
+    }
+
     public function testAnotherMoneyObjectWithSameCurrencyCanBeAdded(): void
     {
         $currency = Currency::from('EUR');
