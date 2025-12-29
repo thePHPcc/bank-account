@@ -59,5 +59,7 @@ final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
         $processor = new ProcessingDepositMoneyCommandProcessor($sourcer, $emitter);
 
         $processor->process(new DepositMoneyCommand($amount, $description));
+
+        $this->assertObjectEquals($amount, $bankAccount->balance());
     }
 }
