@@ -55,5 +55,7 @@ final class ProcessingCloseAccountCommandProcessorTest extends TestCase
         $processor = new ProcessingCloseAccountCommandProcessor($sourcer, $emitter);
 
         $processor->process(new CloseAccountCommand);
+
+        $this->assertFalse($bankAccount->isActive());
     }
 }
