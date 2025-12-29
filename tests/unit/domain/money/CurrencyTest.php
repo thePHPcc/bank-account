@@ -44,8 +44,8 @@ final class CurrencyTest extends TestCase
         $a = Currency::from('EUR');
         $b = Currency::from('GBP');
 
-        $this->assertTrue($a->equalTo($a));
-        $this->assertFalse($a->equalTo($b));
+        $this->assertTrue($a->equals($a));
+        $this->assertFalse($a->equals($b));
     }
 
     public function testCanBeEuro(): void

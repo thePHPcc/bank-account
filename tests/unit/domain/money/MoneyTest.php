@@ -115,8 +115,8 @@ final class MoneyTest extends TestCase
         $b = Money::from(1, Currency::from('GBP'));
         $c = Money::from(2, Currency::from('EUR'));
 
-        $this->assertTrue($a->equalTo($a));
-        $this->assertFalse($a->equalTo($b));
-        $this->assertFalse($a->equalTo($c));
+        $this->assertTrue($a->equals($a));
+        $this->assertFalse($a->equals($b));
+        $this->assertFalse($a->equals($c));
     }
 }

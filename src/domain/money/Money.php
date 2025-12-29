@@ -69,9 +69,9 @@ final readonly class Money
         return $this->amount < 0;
     }
 
-    public function equalTo(self $other): bool
+    public function equals(self $other): bool
     {
-        if (!$this->currency->equalTo($other->currency())) {
+        if (!$this->currency->equals($other->currency())) {
             return false;
         }
 
@@ -80,7 +80,7 @@ final readonly class Money
 
     private function ensureSameCurrency(self $a, self $b): void
     {
-        if (!$a->currency()->equalTo($b->currency())) {
+        if (!$a->currency()->equals($b->currency())) {
             throw new CurrencyMismatchException;
         }
     }

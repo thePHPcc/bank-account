@@ -98,7 +98,7 @@ final readonly class Currency
         return self::CURRENCIES[$this->currencyCode]['sub_unit'];
     }
 
-    public function equalTo(self $other): bool
+    public function equals(self $other): bool
     {
         return $this->currencyCode === $other->currencyCode();
     }
