@@ -61,4 +61,16 @@ final readonly class MoneyDepositedEvent extends Event
             $formatter->format($this->amount),
         );
     }
+
+    /**
+     * @throws AmountMustBePositiveException
+     */
+    private function ensureAmountIsPositive(Money $amount): void
+    {
+        if ($amount->isPositive()) {
+            return;
+        }
+
+        throw new AmountMustBePositiveException;
+    }
 }
