@@ -20,7 +20,6 @@ use example\bankaccount\application\WithdrawMoneyCommandProcessor;
 use example\bankaccount\domain\AccountClosedEvent;
 use example\bankaccount\domain\AccountOpenedEvent;
 use example\bankaccount\domain\CloseAccountCommand;
-use example\bankaccount\domain\Command;
 use example\bankaccount\domain\DepositMoneyCommand;
 use example\bankaccount\domain\Money;
 use example\bankaccount\domain\MoneyDepositedEvent;
@@ -185,9 +184,8 @@ abstract class EventTestCase extends TestCase
         );
     }
 
-    private function processorFor(Command $command): CloseAccountCommandProcessor|DepositMoneyCommandProcessor|OpenAccountCommandProcessor|WithdrawMoneyCommandProcessor
+    private function processorFor(CloseAccountCommand|DepositMoneyCommand|OpenAccountCommand|WithdrawMoneyCommand $command): CloseAccountCommandProcessor|DepositMoneyCommandProcessor|OpenAccountCommandProcessor|WithdrawMoneyCommandProcessor
     {
-        /** @phpstan-ignore match.unhandled */
         return match ($command::class) {
             OpenAccountCommand::class   => new ProcessingOpenAccountCommandProcessor($this->emitter),
             CloseAccountCommand::class  => new ProcessingCloseAccountCommandProcessor($this->sourcer, $this->emitter),
