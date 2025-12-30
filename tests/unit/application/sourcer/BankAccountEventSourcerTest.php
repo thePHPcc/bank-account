@@ -40,6 +40,8 @@ final class BankAccountEventSourcerTest extends TestCase
 {
     use TestTrait;
 
+    private const string OWNER = 'the-owner';
+
     public function testSourcesBankAccountFromEvents(): void
     {
         $this
@@ -50,31 +52,22 @@ final class BankAccountEventSourcerTest extends TestCase
                  */
                 function (array $_events): void
                 {
+                    $accountId = $this->uuid();
+
                     /** @var list<array{type: class-string, amount: ?positive-int}> $_events */
                     $events = $this->mapEvents($_events);
-                    $owner  = 'the-owner';
 
                     $reader = $this->createStub(EventReader::class);
 
                     $reader
-                        ->method('topic')
-                        ->willReturn(
-                            EventCollection::fromArray(
-                                [
-                                    new AccountOpenedEvent(
-                                        $this->uuid(),
-                                        $owner,
-                                    ),
-                                ],
-                            ),
-                            $events,
-                        );
+                        ->method('correlationId')
+                        ->willReturn($events);
 
                     $sourcer = new BankAccountEventSourcer($reader);
 
-                    $bankAccount = $sourcer->source();
+                    $bankAccount = $sourcer->source($accountId);
 
-                    $this->assertSame($owner, $bankAccount->owner());
+                    $this->assertSame(self::OWNER, $bankAccount->owner());
                     $this->assertSame($this->expectedBalance($events)->amount(), $bankAccount->balance()->amount());
                     $this->assertSame($this->expectedActive($events), $bankAccount->isActive());
                 },
@@ -146,7 +139,15 @@ final class BankAccountEventSourcerTest extends TestCase
      */
     private function mapEvents(array $events): EventCollection
     {
-        $result = [];
+        $accountId = $this->uuid();
+
+        $result = [
+            new AccountOpenedEvent(
+                $accountId,
+                $accountId,
+                self::OWNER,
+            ),
+        ];
 
         foreach ($events as $event) {
             if ($event['type'] === MoneyDepositedEvent::class) {
@@ -154,6 +155,7 @@ final class BankAccountEventSourcerTest extends TestCase
 
                 $result[] = new MoneyDepositedEvent(
                     $this->uuid(),
+                    $accountId,
                     Money::from($event['amount'], Currency::from('EUR')),
                     'deposit',
                 );
@@ -162,11 +164,12 @@ final class BankAccountEventSourcerTest extends TestCase
 
                 $result[] = new MoneyWithdrawnEvent(
                     $this->uuid(),
+                    $accountId,
                     Money::from($event['amount'], Currency::from('EUR')),
                     'withdrawal',
                 );
             } else {
-                $result[] = new AccountClosedEvent($this->uuid());
+                $result[] = new AccountClosedEvent($accountId, $this->uuid());
             }
         }
 

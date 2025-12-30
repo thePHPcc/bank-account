@@ -3,6 +3,7 @@ namespace example\bankaccount\application;
 
 use example\framework\http\PostRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -11,14 +12,27 @@ use PHPUnit\Framework\TestCase;
 #[Medium]
 final class CloseAccountRouteTest extends TestCase
 {
-    #[TestDox('Routes POST request to /close-account to CloseAccountCommand')]
+    /**
+     * @return non-empty-list<array{0: non-empty-string}>
+     */
+    public static function provider(): array
+    {
+        return [
+            ['/'],
+            ['/close-account/'],
+            ['/close-account/not-a-uuid'],
+            ['8824fca0-e695-4fb1-9c3b-ade4ef86e5e8'],
+        ];
+    }
+
+    #[TestDox('Routes POST request to /close-account/<uuid> to CloseAccountCommand')]
     public function testRoutesPostRequestForCloseAccount(): void
     {
         $route = new CloseAccountRoute($this->createStub(CommandFactory::class));
 
         $command = $route->route(
             PostRequest::from(
-                '/close-account',
+                '/close-account/8824fca0-e695-4fb1-9c3b-ade4ef86e5e8',
                 '',
             ),
         );
@@ -26,12 +40,13 @@ final class CloseAccountRouteTest extends TestCase
         $this->assertInstanceOf(CloseAccountCommand::class, $command);
     }
 
-    #[TestDox('Does not route POST request to URIs other than /close-account to CloseAccountCommand')]
-    public function testDoesNotRoutePostRequestsForOtherUris(): void
+    #[DataProvider('provider')]
+    #[TestDox('Does not route POST request to URIs other than /close-account/<uuid>')]
+    public function testDoesNotRoutePostRequestsForOtherUris(string $uri): void
     {
         $route = new CloseAccountRoute($this->createStub(CommandFactory::class));
 
-        $command = $route->route(PostRequest::from('/', ''));
+        $command = $route->route(PostRequest::from($uri, ''));
 
         $this->assertFalse($command);
     }

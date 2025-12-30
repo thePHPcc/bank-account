@@ -2,12 +2,14 @@
 namespace example\bankaccount\domain;
 
 use function sprintf;
+use example\framework\library\Uuid;
 
 /**
  * @no-named-arguments
  */
 final readonly class WithdrawMoneyCommand extends Command
 {
+    private Uuid $accountId;
     private Money $amount;
 
     /**
@@ -18,10 +20,16 @@ final readonly class WithdrawMoneyCommand extends Command
     /**
      * @param non-empty-string $description
      */
-    public function __construct(Money $amount, string $description)
+    public function __construct(Uuid $accountId, Money $amount, string $description)
     {
+        $this->accountId   = $accountId;
         $this->amount      = $amount;
         $this->description = $description;
+    }
+
+    public function accountId(): Uuid
+    {
+        return $this->accountId;
     }
 
     public function amount(): Money

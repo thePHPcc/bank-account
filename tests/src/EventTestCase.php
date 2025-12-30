@@ -28,6 +28,7 @@ use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\bankaccount\domain\OpenAccountCommand;
 use example\bankaccount\domain\WithdrawMoneyCommand;
 use example\framework\library\RandomUuidGenerator;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,7 @@ abstract class EventTestCase extends TestCase
     private BankAccountEventSourcer $sourcer;
     private DispatchingEventEmitter $emitter;
     private CollectingEventDispatcher $dispatcher;
+    private Uuid $accountId;
 
     /**
      * @var list<array{className: class-string, description: non-empty-string}>
@@ -71,7 +73,7 @@ abstract class EventTestCase extends TestCase
 
         $this
             ->reader
-            ->method('topic')
+            ->method('correlationId')
             ->willReturn($events);
 
         foreach ($events as $event) {
@@ -134,16 +136,22 @@ abstract class EventTestCase extends TestCase
      */
     final protected function accountOpened(string $owner): AccountOpenedEvent
     {
+        $this->accountId = (new RandomUuidGenerator)->generate();
+
         return new AccountOpenedEvent(
-            (new RandomUuidGenerator)->generate(),
+            $this->accountId,
+            $this->accountId,
             $owner,
         );
     }
 
     final protected function accountClosed(): AccountClosedEvent
     {
+        assert(isset($this->accountId));
+
         return new AccountClosedEvent(
             (new RandomUuidGenerator)->generate(),
+            $this->accountId,
         );
     }
 
@@ -152,8 +160,11 @@ abstract class EventTestCase extends TestCase
      */
     final protected function moneyDeposited(Money $amount, string $description): MoneyDepositedEvent
     {
+        assert(isset($this->accountId));
+
         return new MoneyDepositedEvent(
             (new RandomUuidGenerator)->generate(),
+            $this->accountId,
             $amount,
             $description,
         );
@@ -164,8 +175,11 @@ abstract class EventTestCase extends TestCase
      */
     final protected function moneyWithdrawn(Money $amount, string $description): MoneyWithdrawnEvent
     {
+        assert(isset($this->accountId));
+
         return new MoneyWithdrawnEvent(
             (new RandomUuidGenerator)->generate(),
+            $this->accountId,
             $amount,
             $description,
         );

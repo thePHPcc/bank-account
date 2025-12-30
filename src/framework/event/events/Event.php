@@ -9,15 +9,22 @@ use example\framework\library\Uuid;
 abstract readonly class Event
 {
     private Uuid $id;
+    private Uuid $correlationId;
 
-    public function __construct(Uuid $id)
+    public function __construct(Uuid $id, Uuid $correlationId)
     {
-        $this->id = $id;
+        $this->id            = $id;
+        $this->correlationId = $correlationId;
     }
 
     final public function id(): Uuid
     {
         return $this->id;
+    }
+
+    final public function correlationId(): Uuid
+    {
+        return $this->correlationId;
     }
 
     /**

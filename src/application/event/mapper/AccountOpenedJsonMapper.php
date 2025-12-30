@@ -13,7 +13,7 @@ use example\framework\library\Uuid;
 final class AccountOpenedJsonMapper implements EventArrayMapper
 {
     /**
-     * @param array{event_id: non-empty-string, owner: non-empty-string} $data
+     * @param array{event_id: non-empty-string, correlation_id: non-empty-string, owner: non-empty-string} $data
      *
      * @phpstan-ignore method.childParameterType
      */
@@ -21,6 +21,7 @@ final class AccountOpenedJsonMapper implements EventArrayMapper
     {
         return new AccountOpenedEvent(
             Uuid::from($data['event_id']),
+            Uuid::from($data['correlation_id']),
             $data['owner'],
         );
     }

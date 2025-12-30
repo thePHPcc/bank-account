@@ -7,25 +7,30 @@ use example\framework\library\Uuid;
 final readonly class DummyEventMapper implements EventArrayMapper
 {
     /**
-     * @param array{event_id: non-empty-string, key: non-empty-string} $data
+     * @param array{event_id: non-empty-string, correlation_id: non-empty-string, key: non-empty-string} $data
      *
      * @phpstan-ignore method.childParameterType
      */
     public function fromArray(array $data): DummyEvent
     {
-        return new DummyEvent(Uuid::from($data['event_id']), $data['key']);
+        return new DummyEvent(
+            Uuid::from($data['event_id']),
+            Uuid::from($data['correlation_id']),
+            $data['key'],
+        );
     }
 
     /**
-     * @return array{event_id: non-empty-string, key: non-empty-string} $data
+     * @return array{event_id: non-empty-string, correlation_id: non-empty-string, key: non-empty-string}
      */
     public function toArray(Event $event): array
     {
         assert($event instanceof DummyEvent);
 
         return [
-            'event_id' => $event->id()->asString(),
-            'key'      => $event->key(),
+            'event_id'       => $event->id()->asString(),
+            'correlation_id' => $event->correlationId()->asString(),
+            'key'            => $event->key(),
         ];
     }
 }

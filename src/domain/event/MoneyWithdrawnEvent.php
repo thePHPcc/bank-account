@@ -18,11 +18,11 @@ final readonly class MoneyWithdrawnEvent extends Event
      *
      * @throws AmountMustBePositiveException
      */
-    public function __construct(Uuid $id, Money $amount, string $description)
+    public function __construct(Uuid $id, Uuid $correlationId, Money $amount, string $description)
     {
         $this->ensureAmountIsPositive($amount);
 
-        parent::__construct($id);
+        parent::__construct($id, $correlationId);
 
         $this->amount      = $amount;
         $this->description = $description;

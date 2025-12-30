@@ -2,7 +2,6 @@
 namespace example\bankaccount\application;
 
 use function assert;
-use function count;
 use example\bankaccount\domain\AccountClosedEvent;
 use example\bankaccount\domain\AccountOpenedEvent;
 use example\bankaccount\domain\BankAccount;
@@ -11,6 +10,7 @@ use example\bankaccount\domain\Money;
 use example\bankaccount\domain\MoneyDepositedEvent;
 use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\framework\event\EventReader;
+use example\framework\library\Uuid;
 
 /**
  * @no-named-arguments
@@ -24,15 +24,21 @@ final readonly class BankAccountEventSourcer implements BankAccountSourcer
         $this->reader = $reader;
     }
 
-    public function source(): BankAccount
+    public function source(Uuid $accountId): BankAccount
     {
-        $bankAccount = BankAccount::from(
-            $this->owner(),
-            Money::from(0, Currency::from('EUR')),
-            true,
-        );
+        foreach ($this->reader->correlationId($accountId) as $event) {
+            if ($event instanceof AccountOpenedEvent) {
+                $bankAccount = BankAccount::from(
+                    $event->owner(),
+                    Money::from(0, Currency::from('EUR')),
+                    true,
+                );
 
-        foreach ($this->reader->topic('banking.money-deposited', 'banking.money-withdrawn', 'banking.account-closed') as $event) {
+                continue;
+            }
+
+            assert(isset($bankAccount));
+
             if ($event instanceof MoneyDepositedEvent) {
                 $bankAccount->deposit($event->amount());
             }
@@ -46,22 +52,8 @@ final readonly class BankAccountEventSourcer implements BankAccountSourcer
             }
         }
 
+        assert(isset($bankAccount));
+
         return $bankAccount;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    private function owner(): string
-    {
-        $events = $this->reader->topic('banking.account-opened')->asArray();
-
-        assert(count($events) === 1);
-
-        $event = $events[0];
-
-        assert($event instanceof AccountOpenedEvent);
-
-        return $event->owner();
     }
 }

@@ -5,6 +5,7 @@ use function assert;
 use function file_exists;
 use function file_get_contents;
 use function is_string;
+use example\framework\library\Uuid;
 
 /**
  * @no-named-arguments
@@ -26,7 +27,7 @@ final readonly class FilesystemBankAccountProjectionReader implements BankAccoun
         $this->path = $path;
     }
 
-    public function read(): string
+    public function read(Uuid $accountId): string
     {
         $buffer = file_get_contents($this->path);
 

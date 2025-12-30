@@ -18,11 +18,13 @@ final class AccountClosedJsonMapperTest extends TestCase
     #[TestDox('Maps array to AccountClosedEvent')]
     public function testMapsArrayToAccountClosedEvent(): void
     {
-        $eventId = Uuid::from('e64f6762-fe1b-4d10-8288-5bd309235348');
+        $eventId       = Uuid::from('e64f6762-fe1b-4d10-8288-5bd309235348');
+        $correlationId = Uuid::from('5f7f006d-f7d7-43a3-aef5-6ce7223525b3');
 
         $event = (new AccountClosedJsonMapper)->fromArray(
             [
-                'event_id' => $eventId->asString(),
+                'event_id'       => $eventId->asString(),
+                'correlation_id' => $correlationId->asString(),
             ],
         );
 
@@ -38,6 +40,7 @@ final class AccountClosedJsonMapperTest extends TestCase
             (new AccountClosedJsonMapper)->toArray(
                 new AccountClosedEvent(
                     Uuid::from('ec41052a-6aed-4e36-967d-936ac1c6bbda'),
+                    Uuid::from('748453c0-dd22-4aed-b555-bf4b6562bd98'),
                 ),
             ),
         );

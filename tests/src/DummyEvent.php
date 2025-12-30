@@ -13,9 +13,9 @@ final readonly class DummyEvent extends Event
     /**
      * @param non-empty-string $key
      */
-    public function __construct(Uuid $id, string $key)
+    public function __construct(Uuid $id, Uuid $correlationId, string $key)
     {
-        parent::__construct($id);
+        parent::__construct($id, $correlationId);
 
         $this->key = $key;
     }

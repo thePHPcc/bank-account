@@ -74,7 +74,13 @@ final class EventJsonMapperTest extends TestCase
 
     public function testCannotMapFromJsonWithoutMapperForTopic(): void
     {
-        $json = json_encode(['topic' => 'unknown', 'event_id' => '54acfaf3-608f-4e54-84db-fadcf38bd298']);
+        $json = json_encode(
+            [
+                'topic'          => 'unknown',
+                'event_id'       => '54acfaf3-608f-4e54-84db-fadcf38bd298',
+                'correlation_id' => '54acfaf3-608f-4e54-84db-fadcf38bd298',
+            ],
+        );
 
         assert($json !== false);
 
@@ -87,6 +93,7 @@ final class EventJsonMapperTest extends TestCase
     {
         return new DummyEvent(
             Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
+            Uuid::from('12bd5729-6d15-4d6e-90e4-201e2d4caee9'),
             'value',
         );
     }

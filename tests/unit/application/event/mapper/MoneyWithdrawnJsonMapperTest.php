@@ -22,21 +22,24 @@ final class MoneyWithdrawnJsonMapperTest extends TestCase
     #[TestDox('Maps array to MoneyWithdrawnEvent')]
     public function testMapsArrayToMoneyWithdrawnEvent(): void
     {
-        $eventId     = Uuid::from('6051a259-eb72-4c5e-bdf5-8f32e129f93a');
-        $amount      = 123;
-        $currency    = 'EUR';
-        $description = 'the-description';
+        $eventId       = Uuid::from('6051a259-eb72-4c5e-bdf5-8f32e129f93a');
+        $correlationId = Uuid::from('6d26769a-b757-4a74-b8b4-7f90cb5779cc');
+        $amount        = 123;
+        $currency      = 'EUR';
+        $description   = 'the-description';
 
         $event = (new MoneyWithdrawnJsonMapper)->fromArray(
             [
-                'event_id'    => $eventId->asString(),
-                'amount'      => $amount,
-                'currency'    => $currency,
-                'description' => $description,
+                'event_id'       => $eventId->asString(),
+                'correlation_id' => $correlationId->asString(),
+                'amount'         => $amount,
+                'currency'       => $currency,
+                'description'    => $description,
             ],
         );
 
         $this->assertSame($eventId->asString(), $event->id()->asString());
+        $this->assertSame($correlationId->asString(), $event->correlationId()->asString());
         $this->assertSame($amount, $event->amount()->amount());
         $this->assertSame($currency, $event->amount()->currency()->currencyCode());
         $this->assertSame($description, $event->description());
@@ -58,6 +61,7 @@ final class MoneyWithdrawnJsonMapperTest extends TestCase
             (new MoneyWithdrawnJsonMapper)->toArray(
                 new MoneyWithdrawnEvent(
                     Uuid::from('da820135-3991-4b69-a55a-27c0ce453fa3'),
+                    Uuid::from('4b02b3ef-1784-4172-a136-1cbe4b6492b2'),
                     Money::from($amount, Currency::from($currency)),
                     $description,
                 ),

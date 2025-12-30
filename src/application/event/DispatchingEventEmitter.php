@@ -7,6 +7,7 @@ use example\bankaccount\domain\Money;
 use example\bankaccount\domain\MoneyDepositedEvent;
 use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\framework\event\EventDispatcher;
+use example\framework\library\Uuid;
 use example\framework\library\UuidGenerator;
 
 /**
@@ -31,16 +32,18 @@ final readonly class DispatchingEventEmitter implements EventEmitter
         $this->dispatcher->dispatch(
             new AccountOpenedEvent(
                 $this->uuidGenerator->generate(),
+                $this->uuidGenerator->generate(),
                 $owner,
             ),
         );
     }
 
-    public function accountClosed(): void
+    public function accountClosed(Uuid $id): void
     {
         $this->dispatcher->dispatch(
             new AccountClosedEvent(
                 $this->uuidGenerator->generate(),
+                $id,
             ),
         );
     }
@@ -48,11 +51,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
     /**
      * @param non-empty-string $description
      */
-    public function moneyDeposited(Money $amount, string $description): void
+    public function moneyDeposited(Uuid $id, Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
             new MoneyDepositedEvent(
                 $this->uuidGenerator->generate(),
+                $id,
                 $amount,
                 $description,
             ),
@@ -62,11 +66,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
     /**
      * @param non-empty-string $description
      */
-    public function moneyWithdrawn(Money $amount, string $description): void
+    public function moneyWithdrawn(Uuid $id, Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
             new MoneyWithdrawnEvent(
                 $this->uuidGenerator->generate(),
+                $id,
                 $amount,
                 $description,
             ),

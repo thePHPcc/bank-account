@@ -22,14 +22,15 @@ final class WriteEventStatementTest extends TestCase
             ->method('execute')
             ->with(
                 'INSERT INTO event
-                         (event_id, topic, payload)
-                  VALUES (?, ?, ?);',
+                         (event_id, correlation_id, topic, payload)
+                  VALUES (?, ?, ?, ?);',
                 'id',
+                'correlation-id',
                 'topic',
                 'payload',
             );
 
-        $statement = new WriteEventStatement('id', 'topic', 'payload');
+        $statement = new WriteEventStatement('id', 'correlation-id', 'topic', 'payload');
 
         $statement->execute($connection);
     }

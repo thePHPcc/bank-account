@@ -19,10 +19,14 @@ final readonly class ProcessingWithdrawMoneyCommandProcessor implements Withdraw
 
     public function process(WithdrawMoneyCommand $command): void
     {
-        $bankAccount = $this->sourcer->source();
+        $bankAccount = $this->sourcer->source($command->accountId());
 
         $bankAccount->withdraw($command->amount());
 
-        $this->emitter->moneyWithdrawn($command->amount(), $command->description());
+        $this->emitter->moneyWithdrawn(
+            $command->accountId(),
+            $command->amount(),
+            $command->description(),
+        );
     }
 }

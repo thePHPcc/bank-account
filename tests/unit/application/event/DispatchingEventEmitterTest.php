@@ -48,12 +48,12 @@ final class DispatchingEventEmitterTest extends TestCase
     #[TestDox('accountOpened() emits AccountOpened event')]
     public function testAccountOpenedDispatchesAccountOpenedEvent(): void
     {
-        $uuid = Uuid::from('e3890992-beb0-43a6-a2ab-4fc583cc4693');
+        $eventId = Uuid::from('e3890992-beb0-43a6-a2ab-4fc583cc4693');
 
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($uuid);
+            ->willReturn($eventId);
 
         $owner = 'the-owner';
 
@@ -63,7 +63,8 @@ final class DispatchingEventEmitterTest extends TestCase
             ->method('dispatch')
             ->with(
                 new AccountOpenedEvent(
-                    $uuid,
+                    $eventId,
+                    $eventId,
                     $owner,
                 ),
             );
@@ -74,12 +75,13 @@ final class DispatchingEventEmitterTest extends TestCase
     #[TestDox('accountClosed() emits AccountClosed event')]
     public function testAccountClosedDispatchesAccountClosedEvent(): void
     {
-        $uuid = Uuid::from('6ebf72d7-9eaa-4e23-a79e-398a65d384bb');
+        $accountId = Uuid::from('9951a696-b730-483d-b4b0-a755591e2bb1');
+        $eventId   = Uuid::from('6ebf72d7-9eaa-4e23-a79e-398a65d384bb');
 
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($uuid);
+            ->willReturn($eventId);
 
         $this
             ->dispatcher
@@ -87,22 +89,24 @@ final class DispatchingEventEmitterTest extends TestCase
             ->method('dispatch')
             ->with(
                 new AccountClosedEvent(
-                    $uuid,
+                    $eventId,
+                    $accountId,
                 ),
             );
 
-        $this->emitter->accountClosed();
+        $this->emitter->accountClosed($accountId);
     }
 
     #[TestDox('moneyDeposited() emits MoneyDeposited event')]
     public function testMoneyDepositedDispatchesMoneyDepositedEvent(): void
     {
-        $uuid = Uuid::from('3ad4ff02-5bef-48b4-b61f-d60abd608e78');
+        $accountId = Uuid::from('e36566c2-6675-4cdd-819d-a32d2d11cb0c');
+        $eventId   = Uuid::from('3ad4ff02-5bef-48b4-b61f-d60abd608e78');
 
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($uuid);
+            ->willReturn($eventId);
 
         $amount      = Money::from(123, Currency::from('EUR'));
         $description = 'the-description';
@@ -113,24 +117,26 @@ final class DispatchingEventEmitterTest extends TestCase
             ->method('dispatch')
             ->with(
                 new MoneyDepositedEvent(
-                    $uuid,
+                    $eventId,
+                    $accountId,
                     $amount,
                     $description,
                 ),
             );
 
-        $this->emitter->moneyDeposited($amount, $description);
+        $this->emitter->moneyDeposited($accountId, $amount, $description);
     }
 
     #[TestDox('moneyWithdrawn() emits MoneyWithdrawn event')]
     public function testMoneyWithdrawnDispatchesMoneyWithdrawnEvent(): void
     {
-        $uuid = Uuid::from('07550574-22f9-447e-ac1e-6849bcc6c229');
+        $accountId = Uuid::from('5bc2b3ad-32d1-4e8d-927a-950686cfc8c6');
+        $eventId   = Uuid::from('07550574-22f9-447e-ac1e-6849bcc6c229');
 
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($uuid);
+            ->willReturn($eventId);
 
         $amount      = Money::from(123, Currency::from('EUR'));
         $description = 'the-description';
@@ -141,12 +147,13 @@ final class DispatchingEventEmitterTest extends TestCase
             ->method('dispatch')
             ->with(
                 new MoneyWithdrawnEvent(
-                    $uuid,
+                    $eventId,
+                    $accountId,
                     $amount,
                     $description,
                 ),
             );
 
-        $this->emitter->moneyWithdrawn($amount, $description);
+        $this->emitter->moneyWithdrawn($accountId, $amount, $description);
     }
 }

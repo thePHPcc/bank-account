@@ -15,7 +15,7 @@ use example\framework\library\Uuid;
 final class MoneyDepositedJsonMapper implements EventArrayMapper
 {
     /**
-     * @param array{event_id: non-empty-string, amount: int, currency: non-empty-string, description: non-empty-string} $data
+     * @param array{event_id: non-empty-string, correlation_id: non-empty-string, amount: int, currency: non-empty-string, description: non-empty-string} $data
      *
      * @phpstan-ignore method.childParameterType
      */
@@ -23,6 +23,7 @@ final class MoneyDepositedJsonMapper implements EventArrayMapper
     {
         return new MoneyDepositedEvent(
             Uuid::from($data['event_id']),
+            Uuid::from($data['correlation_id']),
             Money::from($data['amount'], Currency::from($data['currency'])),
             $data['description'],
         );

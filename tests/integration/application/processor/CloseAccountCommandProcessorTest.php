@@ -3,6 +3,7 @@ namespace example\bankaccount\application;
 
 use example\bankaccount\domain\CloseAccountCommand;
 use example\framework\event\EventTestCase;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -18,7 +19,11 @@ final class CloseAccountCommandProcessorTest extends EventTestCase
             $this->accountOpened('the-owner'),
         );
 
-        $this->when(new CloseAccountCommand);
+        $this->when(
+            new CloseAccountCommand(
+                Uuid::from('102bbf1a-fa1c-455a-b77d-5f9f99d8332e'),
+            ),
+        );
 
         $this->then(
             $this->accountClosed(),

@@ -34,6 +34,7 @@ final class SubscribableEventDispatcherTest extends TestCase
     {
         return new DummyEvent(
             Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
+            Uuid::from('01168ef5-56b1-42a7-a2de-3fa6f8f7cce3'),
             'value',
         );
     }

@@ -5,6 +5,7 @@ use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\Money;
 use example\bankaccount\domain\WithdrawMoneyCommand;
 use example\framework\event\EventTestCase;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -23,7 +24,13 @@ final class WithdrawMoneyCommandProcessorTest extends EventTestCase
             $this->accountOpened('the-owner'),
         );
 
-        $this->when(new WithdrawMoneyCommand($amount, $description));
+        $this->when(
+            new WithdrawMoneyCommand(
+                Uuid::from('d153371b-5338-409d-bd9f-a535b471b633'),
+                $amount,
+                $description,
+            ),
+        );
 
         $this->then(
             $this->moneyWithdrawn($amount, $description),

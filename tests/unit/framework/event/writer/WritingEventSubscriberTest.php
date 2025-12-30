@@ -36,6 +36,7 @@ final class WritingEventSubscriberTest extends TestCase
     {
         return new DummyEvent(
             Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
+            Uuid::from('d029bc4e-92a4-424c-bdf3-3d516dd34028'),
             'value',
         );
     }

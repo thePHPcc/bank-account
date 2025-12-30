@@ -5,6 +5,7 @@ use example\bankaccount\domain\BankAccount;
 use example\bankaccount\domain\CloseAccountCommand;
 use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\Money;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(BankAccount::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
+#[UsesClass(Uuid::class)]
 #[Small]
 final class ProcessingCloseAccountCommandProcessorTest extends TestCase
 {
@@ -54,7 +56,11 @@ final class ProcessingCloseAccountCommandProcessorTest extends TestCase
 
         $processor = new ProcessingCloseAccountCommandProcessor($sourcer, $emitter);
 
-        $processor->process(new CloseAccountCommand);
+        $processor->process(
+            new CloseAccountCommand(
+                Uuid::from('2724135b-2c94-41ab-9bab-f6e1755d925e'),
+            ),
+        );
 
         $this->assertFalse($bankAccount->isActive());
     }

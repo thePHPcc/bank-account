@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace example\bankaccount\application;
 
+use example\bankaccount\domain\AccountOpenedEvent;
 use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\Money;
 use example\bankaccount\domain\MoneyDepositedEvent;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(BankAccountHtmlProjector::class)]
+#[UsesClass(AccountOpenedEvent::class)]
 #[UsesClass(MoneyDepositedEvent::class)]
 #[UsesClass(MoneyWithdrawnEvent::class)]
 #[UsesClass(Money::class)]
@@ -29,35 +31,47 @@ final class BankAccountHtmlProjectorTest extends TestCase
 {
     public function testProjectsBankAccountAsHtmlPage(): void
     {
+        $accountId = Uuid::from('2c569fd6-ea17-427c-8288-65da6ce7a37d');
+
         $reader = $this->createStub(EventReader::class);
 
         $reader
-            ->method('topic')
+            ->method('correlationId')
             ->willReturn(
                 EventCollection::fromArray(
                     [
+                        new AccountOpenedEvent(
+                            $accountId,
+                            $accountId,
+                            'the-owner',
+                        ),
                         new MoneyDepositedEvent(
                             Uuid::from('4ea931eb-abd4-4fb5-97b4-b84eca17225d'),
+                            $accountId,
                             Money::from(123, Currency::from('EUR')),
                             'the-description',
                         ),
                         new MoneyDepositedEvent(
                             Uuid::from('80521c43-056d-41ff-ae54-f98e07e7e68e'),
+                            $accountId,
                             Money::from(456, Currency::from('EUR')),
                             'the-description',
                         ),
                         new MoneyWithdrawnEvent(
                             Uuid::from('f70e090c-f7c3-4bbb-9557-a77c6e9005ee'),
+                            $accountId,
                             Money::from(789, Currency::from('EUR')),
                             'the-description',
                         ),
                         new MoneyDepositedEvent(
                             Uuid::from('8e0171ff-bfad-463a-9948-b1660a8521ae'),
+                            $accountId,
                             Money::from(123, Currency::from('EUR')),
                             'the-description',
                         ),
                         new MoneyWithdrawnEvent(
                             Uuid::from('02d70a8e-c05d-4880-9ada-ea0089eb7ba1'),
+                            $accountId,
                             Money::from(456, Currency::from('EUR')),
                             'the-description',
                         ),
@@ -69,7 +83,7 @@ final class BankAccountHtmlProjectorTest extends TestCase
 
         $this->assertStringEqualsFile(
             __DIR__ . '/../../../expectation/bank-account.html',
-            $projector->project(),
+            $projector->project($accountId),
         );
     }
 }

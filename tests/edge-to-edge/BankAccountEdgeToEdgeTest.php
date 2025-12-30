@@ -13,10 +13,10 @@ use PHPUnit\Framework\TestCase;
 #[TestDox('Edge-to-Edge Tests for /bank-account')]
 final class BankAccountEdgeToEdgeTest extends TestCase
 {
-    #[TestDox('GET request to /bank-account sends response with HTML projection (tested through Kernel::run()')]
+    #[TestDox('GET request to /account/<uuid> sends response with HTML projection (tested through Kernel::run()')]
     public function testGetRequestToBankAccountSendsResponseWithHtmlProjection(): void
     {
-        $request = GetRequest::from('/bank-account', []);
+        $request = GetRequest::from('/account/c441fb71-cce9-4156-ba02-5f39912d1444', []);
 
         $response = (new ApplicationFactory)->createApplication()->run($request);
 
@@ -27,11 +27,11 @@ final class BankAccountEdgeToEdgeTest extends TestCase
     }
 
     #[RunInSeparateProcess]
-    #[TestDox('GET request to /bank-account sends response with HTML projection (tested through index.php)')]
+    #[TestDox('GET request to /account/<uuid> sends response with HTML projection (tested through index.php)')]
     public function testGetRequestToBankAccountSendsResponseWithHtmlProjectionSlightlyLarger(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI']    = '/bank-account';
+        $_SERVER['REQUEST_URI']    = '/account/c441fb71-cce9-4156-ba02-5f39912d1444';
 
         require __DIR__ . '/../../public/index.php';
 

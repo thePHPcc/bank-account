@@ -11,6 +11,7 @@ use example\bankaccount\domain\MoneyDepositedEvent;
 use example\bankaccount\domain\MoneyFormatter;
 use example\bankaccount\domain\MoneyWithdrawnEvent;
 use example\framework\event\EventReader;
+use example\framework\library\Uuid;
 
 /**
  * @no-named-arguments
@@ -24,12 +25,12 @@ final readonly class BankAccountHtmlProjector
         $this->reader = $reader;
     }
 
-    public function project(): string
+    public function project(Uuid $accountId): string
     {
         $rows    = '';
         $balance = Money::from(0, Currency::from('EUR'));
 
-        foreach ($this->reader->topic('banking.money-deposited', 'banking.money-withdrawn') as $event) {
+        foreach ($this->reader->correlationId($accountId) as $event) {
             if ($event instanceof MoneyDepositedEvent) {
                 $balance = $balance->plus($event->amount());
 

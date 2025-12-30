@@ -3,6 +3,7 @@ namespace example\bankaccount\application;
 
 use example\bankaccount\domain\CloseAccountCommand as DomainCommand;
 use example\framework\http\Response;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(CloseAccountCommand::class)]
 #[UsesClass(DomainCommand::class)]
 #[UsesClass(Response::class)]
+#[UsesClass(Uuid::class)]
 #[Small]
 #[TestDox('CloseAccountCommand')]
 final class CloseAccountCommandTest extends TestCase
@@ -19,7 +21,9 @@ final class CloseAccountCommandTest extends TestCase
     #[TestDox('Delegates to CloseAccountCommandProcessor and returns empty response')]
     public function testDelegatesToCloseAccountCommandProcessorAndReturnsEmptyResponse(): void
     {
-        $domainCommand = new DomainCommand;
+        $domainCommand = new DomainCommand(
+            Uuid::from('ec2571d4-1785-4fed-a88d-73ba46df0961'),
+        );
 
         $processor = $this->createMock(CloseAccountCommandProcessor::class);
 

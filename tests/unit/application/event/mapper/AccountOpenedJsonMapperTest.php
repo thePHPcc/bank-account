@@ -23,8 +23,9 @@ final class AccountOpenedJsonMapperTest extends TestCase
 
         $event = (new AccountOpenedJsonMapper)->fromArray(
             [
-                'event_id' => $eventId->asString(),
-                'owner'    => $owner,
+                'event_id'       => $eventId->asString(),
+                'correlation_id' => $eventId->asString(),
+                'owner'          => $owner,
             ],
         );
 
@@ -43,6 +44,7 @@ final class AccountOpenedJsonMapperTest extends TestCase
             ],
             (new AccountOpenedJsonMapper)->toArray(
                 new AccountOpenedEvent(
+                    Uuid::from('3ff5d994-977f-4e3c-afab-fe83db3e56a3'),
                     Uuid::from('3ff5d994-977f-4e3c-afab-fe83db3e56a3'),
                     $owner,
                 ),

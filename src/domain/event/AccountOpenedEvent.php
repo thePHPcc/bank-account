@@ -17,9 +17,9 @@ final readonly class AccountOpenedEvent extends Event
     /**
      * @param non-empty-string $owner
      */
-    public function __construct(Uuid $id, string $owner)
+    public function __construct(Uuid $id, Uuid $correlationId, string $owner)
     {
-        parent::__construct($id);
+        parent::__construct($id, $correlationId);
 
         $this->owner = $owner;
     }

@@ -15,14 +15,20 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class MoneyWithdrawnEventTest extends TestCase
 {
-    private const string UUID          = '5d1ae682-c6c2-4dbd-b88f-541660be2508';
-    private const int AMOUNT           = 123;
-    private const string CURRENCY_CODE = 'EUR';
-    private const string DESCRIPTION   = 'the-description';
+    private const string ID             = '5d1ae682-c6c2-4dbd-b88f-541660be2508';
+    private const string CORRELATION_ID = 'cbbce7f1-6e3a-40ed-8250-a10fd1069298';
+    private const int AMOUNT            = 123;
+    private const string CURRENCY_CODE  = 'EUR';
+    private const string DESCRIPTION    = 'the-description';
 
     public function testHasId(): void
     {
-        $this->assertSame(self::UUID, $this->event()->id()->asString());
+        $this->assertSame(self::ID, $this->event()->id()->asString());
+    }
+
+    public function testHasCorrelationId(): void
+    {
+        $this->assertSame(self::CORRELATION_ID, $this->event()->correlationId()->asString());
     }
 
     public function testHasTopic(): void
@@ -51,7 +57,8 @@ final class MoneyWithdrawnEventTest extends TestCase
         $this->expectException(AmountMustBePositiveException::class);
 
         new MoneyWithdrawnEvent(
-            new Uuid(self::UUID),
+            new Uuid(self::ID),
+            new Uuid(self::CORRELATION_ID),
             Money::from(0, Currency::from(self::CURRENCY_CODE)),
             self::DESCRIPTION,
         );
@@ -60,7 +67,8 @@ final class MoneyWithdrawnEventTest extends TestCase
     private function event(): MoneyWithdrawnEvent
     {
         return new MoneyWithdrawnEvent(
-            new Uuid(self::UUID),
+            new Uuid(self::ID),
+            new Uuid(self::CORRELATION_ID),
             Money::from(self::AMOUNT, Currency::from(self::CURRENCY_CODE)),
             self::DESCRIPTION,
         );

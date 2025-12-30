@@ -5,6 +5,7 @@ use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\DepositMoneyCommand as DomainCommand;
 use example\bankaccount\domain\Money;
 use example\framework\http\Response;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Response::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
+#[UsesClass(Uuid::class)]
 #[Small]
 #[TestDox('DepositMoneyCommand')]
 final class DepositMoneyCommandTest extends TestCase
@@ -24,6 +26,7 @@ final class DepositMoneyCommandTest extends TestCase
     public function testDelegatesToDepositMoneyCommandProcessorAndReturnsEmptyResponse(): void
     {
         $domainCommand = new DomainCommand(
+            Uuid::from('6ed52bee-d5be-479f-9a6b-3f6fe9db0b41'),
             Money::from(123, Currency::from('EUR')),
             'the-description',
         );

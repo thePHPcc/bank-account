@@ -7,11 +7,11 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\MysqliWrapper\ReadingDatabaseConnection;
 
-#[CoversClass(ReadEventsStatement::class)]
+#[CoversClass(ReadEventsForTopicStatement::class)]
 #[Group('framework')]
 #[Group('framework/event')]
 #[Small]
-final class ReadEventsStatementTest extends TestCase
+final class ReadEventsForTopicStatementTest extends TestCase
 {
     public function testExecutesStatementToReadEventsByTopic(): void
     {
@@ -28,7 +28,7 @@ final class ReadEventsStatementTest extends TestCase
                 'the-topic',
             );
 
-        $statement = new ReadEventsStatement(['the-topic']);
+        $statement = new ReadEventsForTopicStatement(['the-topic']);
 
         $statement->execute($connection);
     }
@@ -49,7 +49,7 @@ final class ReadEventsStatementTest extends TestCase
                 'another-topic',
             );
 
-        $statement = new ReadEventsStatement(['the-topic', 'another-topic']);
+        $statement = new ReadEventsForTopicStatement(['the-topic', 'another-topic']);
 
         $statement->execute($connection);
     }

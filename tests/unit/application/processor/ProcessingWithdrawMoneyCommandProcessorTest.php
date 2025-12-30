@@ -5,6 +5,7 @@ use example\bankaccount\domain\BankAccount;
 use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\Money;
 use example\bankaccount\domain\WithdrawMoneyCommand;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(BankAccount::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
+#[UsesClass(Uuid::class)]
 #[Small]
 final class ProcessingWithdrawMoneyCommandProcessorTest extends TestCase
 {
@@ -42,7 +44,11 @@ final class ProcessingWithdrawMoneyCommandProcessorTest extends TestCase
         $emitter
             ->expects($this->once())
             ->method('moneyWithdrawn')
-            ->with($amount, $description);
+            ->with(
+                $this->isInstanceOf(Uuid::class),
+                $amount,
+                $description,
+            );
 
         $emitter
             ->expects($this->never())
@@ -58,7 +64,13 @@ final class ProcessingWithdrawMoneyCommandProcessorTest extends TestCase
 
         $processor = new ProcessingWithdrawMoneyCommandProcessor($sourcer, $emitter);
 
-        $processor->process(new WithdrawMoneyCommand($amount, $description));
+        $processor->process(
+            new WithdrawMoneyCommand(
+                Uuid::from('a12c97e1-73de-4036-9004-0975aa1e1780'),
+                $amount,
+                $description,
+            ),
+        );
 
         $this->assertObjectEquals(Money::from(0, Currency::from('EUR')), $bankAccount->balance());
     }

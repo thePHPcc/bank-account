@@ -46,6 +46,8 @@ final class EventJsonMapper
         assert(is_string($data['topic']));
         assert(isset($data['event_id']));
         assert(is_string($data['event_id']));
+        assert(isset($data['correlation_id']));
+        assert(is_string($data['correlation_id']));
         assert(isset($this->mappers[$data['topic']]));
 
         /** @phpstan-ignore argument.type */
@@ -64,8 +66,9 @@ final class EventJsonMapper
         assert(isset($this->mappers[$event->topic()]));
 
         $metadata = [
-            'topic'    => $event->topic(),
-            'event_id' => $event->id()->asString(),
+            'topic'          => $event->topic(),
+            'event_id'       => $event->id()->asString(),
+            'correlation_id' => $event->correlationId()->asString(),
         ];
 
         $data = array_merge(
@@ -108,7 +111,9 @@ final class EventJsonMapper
         if (!array_key_exists('topic', $data) ||
             !is_string($data['topic']) ||
             !array_key_exists('event_id', $data) ||
-            !is_string($data['event_id'])) {
+            !is_string($data['event_id']) ||
+            !array_key_exists('correlation_id', $data) ||
+            !is_string($data['correlation_id'])) {
             throw new CannotMapEventException;
         }
 

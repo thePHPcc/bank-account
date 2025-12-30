@@ -24,6 +24,7 @@ final readonly class DatabaseEventWriter implements EventWriter
     {
         $statement = new WriteEventStatement(
             $event->id()->asString(),
+            $event->correlationId()->asString(),
             $event->topic(),
             $this->mapper->toJson($event),
         );

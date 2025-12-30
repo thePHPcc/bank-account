@@ -19,10 +19,10 @@ final readonly class ProcessingCloseAccountCommandProcessor implements CloseAcco
 
     public function process(CloseAccountCommand $command): void
     {
-        $bankAccount = $this->sourcer->source();
+        $bankAccount = $this->sourcer->source($command->accountId());
 
         $bankAccount->close();
 
-        $this->emitter->accountClosed();
+        $this->emitter->accountClosed($command->accountId());
     }
 }

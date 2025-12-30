@@ -19,10 +19,14 @@ final readonly class ProcessingDepositMoneyCommandProcessor implements DepositMo
 
     public function process(DepositMoneyCommand $command): void
     {
-        $bankAccount = $this->sourcer->source();
+        $bankAccount = $this->sourcer->source($command->accountId());
 
         $bankAccount->deposit($command->amount());
 
-        $this->emitter->moneyDeposited($command->amount(), $command->description());
+        $this->emitter->moneyDeposited(
+            $command->accountId(),
+            $command->amount(),
+            $command->description(),
+        );
     }
 }

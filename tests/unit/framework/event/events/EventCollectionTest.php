@@ -66,10 +66,12 @@ final class EventCollectionTest extends TestCase
         return [
             new DummyEvent(
                 Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
+                Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
                 'value',
             ),
             new DummyEvent(
                 Uuid::from('31314fcc-c716-47b6-9d5c-d2a631d35f1a'),
+                Uuid::from('9f0fd1e7-46b1-40cd-9665-1b7535e187c8'),
                 'value',
             ),
         ];

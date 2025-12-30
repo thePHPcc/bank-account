@@ -12,12 +12,17 @@ use PHPUnit\Framework\TestCase;
 #[Small]
 final class AccountOpenedEventTest extends TestCase
 {
-    private const string UUID  = '9e9c67c5-8fd7-4561-9a06-97fbffce829c';
+    private const string ID    = '9e9c67c5-8fd7-4561-9a06-97fbffce829c';
     private const string OWNER = 'the-owner';
 
     public function testHasId(): void
     {
-        $this->assertSame(self::UUID, $this->event()->id()->asString());
+        $this->assertSame(self::ID, $this->event()->id()->asString());
+    }
+
+    public function testHasCorrelationIdIdenticalToId(): void
+    {
+        $this->assertSame(self::ID, $this->event()->correlationId()->asString());
     }
 
     public function testHasTopic(): void
@@ -38,7 +43,8 @@ final class AccountOpenedEventTest extends TestCase
     private function event(): AccountOpenedEvent
     {
         return new AccountOpenedEvent(
-            new Uuid(self::UUID),
+            new Uuid(self::ID),
+            new Uuid(self::ID),
             self::OWNER,
         );
     }

@@ -2,6 +2,7 @@
 namespace example\bankaccount\application;
 
 use example\bankaccount\domain\Money;
+use example\framework\library\Uuid;
 
 /**
  * @no-named-arguments
@@ -13,15 +14,15 @@ interface EventEmitter
      */
     public function accountOpened(string $owner): void;
 
-    public function accountClosed(): void;
+    public function accountClosed(Uuid $id): void;
 
     /**
      * @param non-empty-string $description
      */
-    public function moneyDeposited(Money $amount, string $description): void;
+    public function moneyDeposited(Uuid $id, Money $amount, string $description): void;
 
     /**
      * @param non-empty-string $description
      */
-    public function moneyWithdrawn(Money $amount, string $description): void;
+    public function moneyWithdrawn(Uuid $id, Money $amount, string $description): void;
 }

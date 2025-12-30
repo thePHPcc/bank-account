@@ -18,10 +18,10 @@ use PHPUnit\Framework\TestCase;
 #[TestDox('End-to-End Tests for /bank-account')]
 final class BankAccountEndToEndTest extends TestCase
 {
-    #[TestDox('GET request to /bank-account sends response with HTML projection')]
+    #[TestDox('GET request to /account/<uuid> sends response with HTML projection')]
     public function testGetRequestToBankAccountSendsResponseWithHtmlProjection(): void
     {
-        $response = $this->request('/bank-account');
+        $response = $this->request('/account/c441fb71-cce9-4156-ba02-5f39912d1444');
 
         $this->assertStringEqualsFile(
             __DIR__ . '/../expectation/bank-account.html',

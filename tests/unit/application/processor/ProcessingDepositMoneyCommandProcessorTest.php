@@ -5,6 +5,7 @@ use example\bankaccount\domain\BankAccount;
 use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\DepositMoneyCommand;
 use example\bankaccount\domain\Money;
+use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(BankAccount::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
+#[UsesClass(Uuid::class)]
 #[Small]
 final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
 {
@@ -42,7 +44,11 @@ final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
         $emitter
             ->expects($this->once())
             ->method('moneyDeposited')
-            ->with($amount, $description);
+            ->with(
+                $this->isInstanceOf(Uuid::class),
+                $amount,
+                $description,
+            );
 
         $emitter
             ->expects($this->never())
@@ -58,7 +64,13 @@ final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
 
         $processor = new ProcessingDepositMoneyCommandProcessor($sourcer, $emitter);
 
-        $processor->process(new DepositMoneyCommand($amount, $description));
+        $processor->process(
+            new DepositMoneyCommand(
+                Uuid::from('edb47417-355a-4c6f-9f4f-5e4698cee264'),
+                $amount,
+                $description,
+            ),
+        );
 
         $this->assertObjectEquals($amount, $bankAccount->balance());
     }

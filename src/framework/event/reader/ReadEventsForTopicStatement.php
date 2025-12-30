@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 namespace example\framework\event;
 
-use function array_fill;
-use function count;
+use function array_map;
 use function implode;
 use function sprintf;
 use SebastianBergmann\MysqliWrapper\ReadingDatabaseConnection;
@@ -11,7 +10,7 @@ use SebastianBergmann\MysqliWrapper\ReadStatement;
 /**
  * @no-named-arguments
  */
-final readonly class ReadEventsStatement implements ReadStatement
+final readonly class ReadEventsForTopicStatement implements ReadStatement
 {
     /**
      * @var non-empty-list<non-empty-string>
@@ -40,7 +39,7 @@ final readonly class ReadEventsStatement implements ReadStatement
                   ORDER BY id;',
                 implode(
                     ', ',
-                    array_fill(0, count($this->topics), '?'),
+                    array_map(static fn (): string => '?', $this->topics),
                 ),
             ),
             ...$this->topics,
