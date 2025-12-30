@@ -2,10 +2,8 @@
 namespace example\bankaccount\application;
 
 use example\bankaccount\domain\Currency;
-use example\bankaccount\domain\DepositMoneyCommand;
 use example\bankaccount\domain\Money;
 use example\framework\event\EventTestCase;
-use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -25,8 +23,7 @@ final class DepositMoneyCommandProcessorTest extends EventTestCase
         );
 
         $this->when(
-            new DepositMoneyCommand(
-                Uuid::from('c819cca2-fe81-44e3-ae6c-34d5c01d0525'),
+            $this->depositMoney(
                 $amount,
                 $description,
             ),

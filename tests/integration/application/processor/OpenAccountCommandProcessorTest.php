@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace example\bankaccount\application;
 
-use example\bankaccount\domain\OpenAccountCommand;
 use example\framework\event\EventTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
@@ -16,7 +15,9 @@ final class OpenAccountCommandProcessorTest extends EventTestCase
     {
         $owner = 'the-owner';
 
-        $this->when(new OpenAccountCommand($owner));
+        $this->when(
+            $this->openAccount($owner),
+        );
 
         $this->then(
             $this->accountOpened($owner),

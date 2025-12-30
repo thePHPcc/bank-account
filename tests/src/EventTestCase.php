@@ -133,6 +133,14 @@ abstract class EventTestCase extends TestCase
     /**
      * @param non-empty-string $owner
      */
+    final protected function openAccount(string $owner): OpenAccountCommand
+    {
+        return new OpenAccountCommand($owner);
+    }
+
+    /**
+     * @param non-empty-string $owner
+     */
     final protected function accountOpened(string $owner): AccountOpenedEvent
     {
         $this->accountId = (new RandomUuidGenerator)->generate();
@@ -142,6 +150,13 @@ abstract class EventTestCase extends TestCase
             $this->accountId,
             $owner,
         );
+    }
+
+    final protected function closeAccount(): CloseAccountCommand
+    {
+        assert(isset($this->accountId));
+
+        return new CloseAccountCommand($this->accountId);
     }
 
     final protected function accountClosed(): AccountClosedEvent
@@ -157,12 +172,40 @@ abstract class EventTestCase extends TestCase
     /**
      * @param non-empty-string $description
      */
+    final protected function depositMoney(Money $amount, string $description): DepositMoneyCommand
+    {
+        assert(isset($this->accountId));
+
+        return new DepositMoneyCommand(
+            $this->accountId,
+            $amount,
+            $description,
+        );
+    }
+
+    /**
+     * @param non-empty-string $description
+     */
     final protected function moneyDeposited(Money $amount, string $description): MoneyDepositedEvent
     {
         assert(isset($this->accountId));
 
         return new MoneyDepositedEvent(
             (new RandomUuidGenerator)->generate(),
+            $this->accountId,
+            $amount,
+            $description,
+        );
+    }
+
+    /**
+     * @param non-empty-string $description
+     */
+    final protected function withdrawMoney(Money $amount, string $description): WithdrawMoneyCommand
+    {
+        assert(isset($this->accountId));
+
+        return new WithdrawMoneyCommand(
             $this->accountId,
             $amount,
             $description,
