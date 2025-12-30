@@ -17,12 +17,6 @@ CREATE TABLE `event` (
   INDEX       (`topic`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `test` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 CREATE USER test_fixture_manager@127.0.0.1 IDENTIFIED BY 'test_fixture_manager_password';
 GRANT ALL PRIVILEGES ON bankaccount.* TO test_fixture_manager@127.0.0.1;
 
