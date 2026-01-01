@@ -29,10 +29,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
      */
     public function accountOpened(string $owner): void
     {
+        $accountId = $this->uuidGenerator->generate();
+
         $this->dispatcher->dispatch(
             new AccountOpenedEvent(
-                $this->uuidGenerator->generate(),
-                $this->uuidGenerator->generate(),
+                $accountId,
+                $accountId,
                 $owner,
             ),
         );
