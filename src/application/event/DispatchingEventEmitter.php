@@ -40,12 +40,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
         );
     }
 
-    public function accountClosed(Uuid $id): void
+    public function accountClosed(Uuid $accountId): void
     {
         $this->dispatcher->dispatch(
             new AccountClosedEvent(
                 $this->uuidGenerator->generate(),
-                $id,
+                $accountId,
             ),
         );
     }
@@ -53,12 +53,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
     /**
      * @param non-empty-string $description
      */
-    public function moneyDeposited(Uuid $id, Money $amount, string $description): void
+    public function moneyDeposited(Uuid $accountId, Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
             new MoneyDepositedEvent(
                 $this->uuidGenerator->generate(),
-                $id,
+                $accountId,
                 $amount,
                 $description,
             ),
@@ -68,12 +68,12 @@ final readonly class DispatchingEventEmitter implements EventEmitter
     /**
      * @param non-empty-string $description
      */
-    public function moneyWithdrawn(Uuid $id, Money $amount, string $description): void
+    public function moneyWithdrawn(Uuid $accountId, Money $amount, string $description): void
     {
         $this->dispatcher->dispatch(
             new MoneyWithdrawnEvent(
                 $this->uuidGenerator->generate(),
-                $id,
+                $accountId,
                 $amount,
                 $description,
             ),

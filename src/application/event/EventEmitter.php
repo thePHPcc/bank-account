@@ -14,15 +14,15 @@ interface EventEmitter
      */
     public function accountOpened(string $owner): void;
 
-    public function accountClosed(Uuid $id): void;
+    public function accountClosed(Uuid $accountId): void;
 
     /**
      * @param non-empty-string $description
      */
-    public function moneyDeposited(Uuid $id, Money $amount, string $description): void;
+    public function moneyDeposited(Uuid $accountId, Money $amount, string $description): void;
 
     /**
      * @param non-empty-string $description
      */
-    public function moneyWithdrawn(Uuid $id, Money $amount, string $description): void;
+    public function moneyWithdrawn(Uuid $accountId, Money $amount, string $description): void;
 }
