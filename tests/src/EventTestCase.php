@@ -49,11 +49,6 @@ abstract class EventTestCase extends TestCase
      */
     private array $when;
 
-    /**
-     * @var list<array{className: class-string, description: non-empty-string}>
-     */
-    private array $then = [];
-
     final protected function setUp(): void
     {
         $this->reader     = $this->createStub(EventReader::class);
@@ -111,8 +106,10 @@ abstract class EventTestCase extends TestCase
             $this->assertEventObjectsAreEqual($expected[$key], $actual[$key]);
         }
 
+        $then = [];
+
         foreach ($events as $event) {
-            $this->then[] = [
+            $then[] = [
                 'className'   => $event::class,
                 'description' => $event->asString(),
             ];
@@ -123,7 +120,7 @@ abstract class EventTestCase extends TestCase
                 [
                     'given' => $this->given,
                     'when'  => $this->when,
-                    'then'  => $this->then,
+                    'then'  => $then,
                 ],
                 JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT,
             ),
