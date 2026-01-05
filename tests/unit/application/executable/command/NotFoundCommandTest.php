@@ -3,6 +3,7 @@ namespace example\bankaccount\application;
 
 use example\framework\http\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -10,6 +11,8 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(NotFoundCommand::class)]
 #[UsesClass(Response::class)]
+#[Group('unit/application')]
+#[Group('unit/application/command')]
 #[Small]
 #[TestDox('NotFoundCommand')]
 final class NotFoundCommandTest extends TestCase

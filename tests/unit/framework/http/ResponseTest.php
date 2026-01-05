@@ -7,8 +7,8 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Response::class)]
-#[Group('framework')]
-#[Group('framework/http')]
+#[Group('unit/framework')]
+#[Group('unit/framework/http')]
 #[Small]
 final class ResponseTest extends TestCase
 {

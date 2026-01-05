@@ -12,7 +12,9 @@ use example\framework\event\EventCollectionIterator;
 use example\framework\event\EventReader;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +28,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(EventCollection::class)]
 #[UsesClass(EventCollectionIterator::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/projection')]
 #[Small]
+#[TestDox('BankAccountHtmlProjector')]
 final class BankAccountHtmlProjectorTest extends TestCase
 {
     public function testProjectsBankAccountAsHtmlPage(): void

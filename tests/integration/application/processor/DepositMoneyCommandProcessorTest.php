@@ -5,14 +5,18 @@ use example\bankaccount\domain\Currency;
 use example\bankaccount\domain\Money;
 use example\framework\event\EventTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 
 #[CoversClass(ProcessingDepositMoneyCommandProcessor::class)]
+#[Group('integration/application')]
+#[Group('integration/application/command-processor')]
 #[Medium]
+#[TestDox('ProcessingDepositMoneyCommandProcessor')]
 final class DepositMoneyCommandProcessorTest extends EventTestCase
 {
-    #[TestDox('A MoneyDepositedEvent is emitted when money is deposited')]
+    #[TestDox('Emits a MoneyDepositedEvent when money is deposited')]
     public function testEmitsMoneyDepositedEvent(): void
     {
         $amount      = Money::from(123, Currency::from('EUR'));

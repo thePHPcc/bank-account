@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(GetRequest::class)]
 #[UsesClass(PostRequest::class)]
 #[UsesClass(Response::class)]
-#[Group('framework')]
-#[Group('framework/http')]
+#[Group('unit/framework')]
+#[Group('unit/framework/http')]
 #[Small]
 final class KernelTest extends TestCase
 {

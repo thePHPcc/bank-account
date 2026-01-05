@@ -3,6 +3,7 @@ namespace example\bankaccount\domain;
 
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Money::class)]
 #[UsesClass(MoneyFormatter::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/domain')]
+#[Group('unit/domain/event')]
 #[Small]
 final class MoneyWithdrawnEventTest extends TestCase
 {

@@ -11,6 +11,7 @@ use example\framework\event\EventDispatcher;
 use example\framework\library\Uuid;
 use example\framework\library\UuidGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -18,7 +19,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
-#[TestDox('DispatchingEventEmitter')]
 #[CoversClass(DispatchingEventEmitter::class)]
 #[UsesClass(AccountOpenedEvent::class)]
 #[UsesClass(AccountClosedEvent::class)]
@@ -27,7 +27,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/event')]
 #[Small]
+#[TestDox('DispatchingEventEmitter')]
 final class DispatchingEventEmitterTest extends TestCase
 {
     private DispatchingEventEmitter $emitter;

@@ -4,9 +4,12 @@ namespace example\framework\event;
 use function assert;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversClass(DatabaseEventReader::class)]
+#[Group('integration/framework')]
+#[Group('integration/framework/event')]
 #[Medium]
 final class DatabaseEventReaderTest extends DatabaseTestCase
 {

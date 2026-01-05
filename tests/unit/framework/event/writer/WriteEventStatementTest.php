@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\MysqliWrapper\WritingDatabaseConnection;
 
 #[CoversClass(WriteEventStatement::class)]
-#[Group('framework')]
-#[Group('framework/event')]
+#[Group('unit/framework')]
+#[Group('unit/framework/event')]
 #[Small]
 final class WriteEventStatementTest extends TestCase
 {

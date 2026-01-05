@@ -3,6 +3,7 @@ namespace example\bankaccount\application;
 
 use example\bankaccount\domain\OpenAccountCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -10,7 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ProcessingOpenAccountCommandProcessor::class)]
 #[UsesClass(OpenAccountCommand::class)]
+#[Group('unit/application')]
+#[Group('unit/application/command-processor')]
 #[Small]
+#[TestDox('ProcessingOpenAccountCommandProcessor')]
 final class ProcessingOpenAccountCommandProcessorTest extends TestCase
 {
     #[TestDox('Emits an AccountOpened event')]

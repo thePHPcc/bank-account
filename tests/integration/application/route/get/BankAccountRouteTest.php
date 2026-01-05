@@ -4,12 +4,16 @@ namespace example\bankaccount\application;
 use example\framework\http\GetRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(BankAccountRoute::class)]
+#[Group('integration/application')]
+#[Group('integration/application/routing')]
 #[Medium]
+#[TestDox('BankAccountRoute')]
 final class BankAccountRouteTest extends TestCase
 {
     /**
@@ -36,7 +40,7 @@ final class BankAccountRouteTest extends TestCase
     }
 
     #[DataProvider('provider')]
-    #[TestDox('Does not route GET requests to URIs other than /account/<uuid>')]
+    #[TestDox('Does not route GET request to $uri')]
     public function testDoesNotRouteGetRequestsForOtherUris(string $uri): void
     {
         $route = new BankAccountRoute($this->createStub(QueryFactory::class));

@@ -7,8 +7,8 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Uuid::class)]
-#[Group('framework')]
-#[Group('framework/uuid')]
+#[Group('unit/framework')]
+#[Group('unit/framework/uuid')]
 #[Small]
 final class UuidTest extends TestCase
 {

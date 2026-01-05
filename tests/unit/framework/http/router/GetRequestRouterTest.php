@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(GetRequestRouter::class)]
 #[UsesClass(GetRequest::class)]
 #[UsesClass(Request::class)]
-#[Group('framework')]
-#[Group('framework/http')]
+#[Group('unit/framework')]
+#[Group('unit/framework/http')]
 #[Small]
 final class GetRequestRouterTest extends TestCase
 {

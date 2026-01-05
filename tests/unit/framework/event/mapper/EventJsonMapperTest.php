@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(EventJsonMapper::class)]
 #[UsesClass(Event::class)]
 #[UsesClass(Uuid::class)]
-#[Group('framework')]
-#[Group('framework/event')]
+#[Group('unit/framework')]
+#[Group('unit/framework/event')]
 #[Small]
 final class EventJsonMapperTest extends TestCase
 {

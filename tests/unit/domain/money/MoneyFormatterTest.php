@@ -2,6 +2,7 @@
 namespace example\bankaccount\domain;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -9,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(MoneyFormatter::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
+#[Group('unit/domain')]
+#[Group('unit/domain/money')]
 #[Small]
 final class MoneyFormatterTest extends TestCase
 {

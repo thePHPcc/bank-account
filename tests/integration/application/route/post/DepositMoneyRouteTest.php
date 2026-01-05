@@ -6,12 +6,16 @@ use function json_encode;
 use example\framework\http\PostRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DepositMoneyRoute::class)]
+#[Group('integration/application')]
+#[Group('integration/application/routing')]
 #[Medium]
+#[TestDox('DepositMoneyRoute')]
 final class DepositMoneyRouteTest extends TestCase
 {
     /**
@@ -50,7 +54,7 @@ final class DepositMoneyRouteTest extends TestCase
     }
 
     #[DataProvider('provider')]
-    #[TestDox('Does not route POST request to URIs other than /deposit-money/<uuid>')]
+    #[TestDox('Does not route POST request to $uri')]
     public function testDoesNotRoutePostRequestsForOtherUris(string $uri): void
     {
         $route = new DepositMoneyRoute($this->createStub(CommandFactory::class));

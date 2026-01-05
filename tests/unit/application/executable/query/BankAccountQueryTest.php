@@ -4,6 +4,7 @@ namespace example\bankaccount\application;
 use example\framework\http\Response;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -12,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(BankAccountQuery::class)]
 #[UsesClass(Response::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/query')]
 #[Small]
 #[TestDox('BankAccountQuery')]
 final class BankAccountQueryTest extends TestCase

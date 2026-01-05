@@ -3,13 +3,18 @@ namespace example\bankaccount\application;
 
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FilesystemBankAccountProjectionReader::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/projection')]
 #[Small]
+#[TestDox('FilesystemBankAccountProjectionReader')]
 final class FilesystemBankAccountProjectionReaderTest extends TestCase
 {
     public function testReadsHtmlProjectionOfBankAccount(): void

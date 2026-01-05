@@ -11,8 +11,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Request::class)]
 #[UsesClass(GetRequest::class)]
 #[UsesClass(PostRequest::class)]
-#[Group('framework')]
-#[Group('framework/http')]
+#[Group('unit/framework')]
+#[Group('unit/framework/http')]
 #[RunTestsInSeparateProcesses]
 #[Small]
 final class RequestTest extends TestCase

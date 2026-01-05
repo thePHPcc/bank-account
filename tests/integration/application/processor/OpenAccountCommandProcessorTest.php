@@ -3,14 +3,18 @@ namespace example\bankaccount\application;
 
 use example\framework\event\EventTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 
 #[CoversClass(ProcessingOpenAccountCommandProcessor::class)]
+#[Group('integration/application')]
+#[Group('integration/application/command-processor')]
 #[Medium]
+#[TestDox('ProcessingOpenAccountCommandProcessor')]
 final class OpenAccountCommandProcessorTest extends EventTestCase
 {
-    #[TestDox('An AccountOpenedEvent is emitted when an account is opened')]
+    #[TestDox('Emits an AccountOpenedEvent when an account is opened')]
     public function testEmitsAccountOpenedEvent(): void
     {
         $owner = 'the-owner';

@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RandomUuidGenerator::class)]
 #[UsesClass(Uuid::class)]
-#[Group('framework')]
-#[Group('framework/uuid')]
+#[Group('unit/framework')]
+#[Group('unit/framework/uuid')]
 #[Small]
 final class RandomUuidGeneratorTest extends TestCase
 {

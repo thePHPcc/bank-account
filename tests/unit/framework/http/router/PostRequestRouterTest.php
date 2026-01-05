@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(PostRequestRouter::class)]
 #[UsesClass(PostRequest::class)]
 #[UsesClass(Request::class)]
-#[Group('framework')]
-#[Group('framework/http')]
+#[Group('unit/framework')]
+#[Group('unit/framework/http')]
 #[Small]
 final class PostRequestRouterTest extends TestCase
 {

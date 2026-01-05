@@ -5,6 +5,7 @@ use example\bankaccount\domain\CloseAccountCommand as DomainCommand;
 use example\framework\http\Response;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -14,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(DomainCommand::class)]
 #[UsesClass(Response::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/command')]
 #[Small]
 #[TestDox('CloseAccountCommand')]
 final class CloseAccountCommandTest extends TestCase

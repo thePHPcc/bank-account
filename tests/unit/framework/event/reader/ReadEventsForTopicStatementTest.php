@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\MysqliWrapper\ReadingDatabaseConnection;
 
 #[CoversClass(ReadEventsForTopicStatement::class)]
-#[Group('framework')]
-#[Group('framework/event')]
+#[Group('unit/framework')]
+#[Group('unit/framework/event')]
 #[Small]
 final class ReadEventsForTopicStatementTest extends TestCase
 {

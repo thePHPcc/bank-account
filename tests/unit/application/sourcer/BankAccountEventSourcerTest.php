@@ -18,6 +18,7 @@ use example\framework\event\EventReader;
 use example\framework\library\RandomUuidGenerator;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -34,6 +35,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(MoneyWithdrawnEvent::class)]
 #[UsesClass(RandomUuidGenerator::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/sourcer')]
 #[Small]
 #[TestDox('BankAccountEventSourcer')]
 final class BankAccountEventSourcerTest extends TestCase

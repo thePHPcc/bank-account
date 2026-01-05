@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(EventCollectionIterator::class)]
 #[UsesClass(Event::class)]
 #[UsesClass(Uuid::class)]
-#[Group('framework')]
-#[Group('framework/event')]
+#[Group('unit/framework')]
+#[Group('unit/framework/event')]
 #[Small]
 final class EventCollectionTest extends TestCase
 {

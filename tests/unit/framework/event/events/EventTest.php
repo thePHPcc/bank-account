@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Event::class)]
 #[UsesClass(Uuid::class)]
-#[Group('framework')]
-#[Group('framework/event')]
+#[Group('unit/framework')]
+#[Group('unit/framework/event')]
 #[Small]
 final class EventTest extends TestCase
 {

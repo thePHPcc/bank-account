@@ -4,6 +4,7 @@ namespace example\bankaccount\application;
 use example\bankaccount\domain\AccountOpenedEvent;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -12,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(AccountOpenedJsonMapper::class)]
 #[UsesClass(AccountOpenedEvent::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/event')]
+#[TestDox('AccountOpenedJsonMapper')]
 #[Small]
 final class AccountOpenedJsonMapperTest extends TestCase
 {

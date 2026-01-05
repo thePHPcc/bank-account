@@ -3,12 +3,15 @@ namespace example\bankaccount\domain;
 
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(OpenAccountCommand::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/domain')]
+#[Group('unit/domain/command')]
 #[Small]
 final class OpenAccountCommandTest extends TestCase
 {

@@ -6,6 +6,7 @@ use example\bankaccount\domain\Money;
 use example\bankaccount\domain\MoneyDepositedEvent;
 use example\framework\library\Uuid;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -16,6 +17,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Money::class)]
 #[UsesClass(Currency::class)]
 #[UsesClass(Uuid::class)]
+#[Group('unit/application')]
+#[Group('unit/application/event')]
+#[TestDox('MoneyDepositedJsonMapper')]
 #[Small]
 final class MoneyDepositedJsonMapperTest extends TestCase
 {

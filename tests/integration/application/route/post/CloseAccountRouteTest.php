@@ -4,12 +4,16 @@ namespace example\bankaccount\application;
 use example\framework\http\PostRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CloseAccountRoute::class)]
+#[Group('integration/application')]
+#[Group('integration/application/routing')]
 #[Medium]
+#[TestDox('CloseAccountRoute')]
 final class CloseAccountRouteTest extends TestCase
 {
     /**
@@ -41,7 +45,7 @@ final class CloseAccountRouteTest extends TestCase
     }
 
     #[DataProvider('provider')]
-    #[TestDox('Does not route POST request to URIs other than /close-account/<uuid>')]
+    #[TestDox('Does not route POST request to $uri')]
     public function testDoesNotRoutePostRequestsForOtherUris(string $uri): void
     {
         $route = new CloseAccountRoute($this->createStub(CommandFactory::class));
