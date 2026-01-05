@@ -82,9 +82,11 @@ final class BankAccount
 
     private function ensureAccountIsActive(): void
     {
-        if (!$this->isActive()) {
-            throw new AccountIsClosedException;
+        if ($this->isActive()) {
+            return;
         }
+
+        throw new AccountIsClosedException;
     }
 
     /**
