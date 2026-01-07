@@ -10,7 +10,7 @@ use function mb_strlen;
 use function sprintf;
 use function str_replace;
 
-final readonly class TestRenderer
+final readonly class GivenWhenThenRenderer
 {
     /**
      * @param list<non-empty-string> $given
@@ -53,16 +53,16 @@ EOT,
             $edges[] = sprintf('then_%d', $index + 1);
         }
 
-        $template = file_get_contents(__DIR__ . '/templates/events.dot');
+        $template = file_get_contents(__DIR__ . '/templates/given_when_then.dot');
 
         assert(is_string($template));
 
         $result = str_replace(
             [
-                '{{{given}}}',
-                '{{{when}}}',
-                '{{{then}}}',
-                '{{{edges}}}',
+                '{{given}}',
+                '{{when}}',
+                '{{then}}',
+                '{{edges}}',
             ],
             [
                 $givenBuffer,

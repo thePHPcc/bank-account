@@ -9,7 +9,7 @@ strict digraph G {
         color=lightgrey;
         fontname="Balsamiq Sans";
         fontsize=18;
-        {{{given}}}
+        {{given}}
     }
 
     subgraph cluster_when {
@@ -19,7 +19,7 @@ strict digraph G {
         fontname="Balsamiq Sans";
         fontsize=18;
 
-        command [label="{{{when}}}", fillcolor="#729fcf",color="#3465a4"];
+        command [label="{{when}}", fillcolor="#729fcf",color="#3465a4"];
     }
 
     subgraph cluster_then {
@@ -28,8 +28,8 @@ strict digraph G {
         color=lightgrey;
         fontname="Balsamiq Sans";
         fontsize=18;
-        {{{then}}}
+        {{then}}
     }
 
-    {{{edges}}} [style=invis];
+    {{edges}} [style=invis];
 }

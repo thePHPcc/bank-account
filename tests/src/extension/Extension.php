@@ -61,8 +61,6 @@ final class Extension implements ExtensionInterface
 
         $this->targetDirectory = $targetDirectory;
 
-        $this->createDirectory($this->targetDirectory);
-
         $format = 'dot';
 
         if ($parameters->has('format')) {
@@ -121,51 +119,62 @@ final class Extension implements ExtensionInterface
 
     public function testRunnerFinished(): void
     {
-        $this->renderTests();
+        $this->renderGivenWhenThen();
     }
 
-    private function renderTests(): void
+    private function renderGivenWhenThen(): void
     {
         foreach ($this->tests as $test) {
             $tmp       = explode('\\', $test['test']->className());
             $className = array_pop($tmp);
 
-            $dot = (new TestRenderer)->render(
-                $test['given'],
-                $test['when'],
-                $test['then'],
-            );
-
-            $target = sprintf(
-                '%s%s%s_%s.%s',
-                $this->targetDirectory,
-                DIRECTORY_SEPARATOR,
-                $className,
-                $test['test']->methodName(),
-                $this->format,
-            );
-
-            if ($this->format === 'dot') {
-                file_put_contents($target, $dot);
-
-                return;
-            }
-
-            $tmpFile = tempnam(sys_get_temp_dir(), 'graphviz');
-
-            file_put_contents($tmpFile, $dot);
-
-            exec(
+            $this->renderDot(
                 sprintf(
-                    'dot -T%s -o %s %s > /dev/null 2>&1',
-                    $this->format,
-                    $target,
-                    $tmpFile,
+                    '%s_%s',
+                    $className,
+                    $test['test']->methodName(),
+                ),
+                (new GivenWhenThenRenderer)->render(
+                    $test['given'],
+                    $test['when'],
+                    $test['then'],
                 ),
             );
-
-            unlink($tmpFile);
         }
+    }
+
+    private function renderDot(string $target, string $dot): void
+    {
+        $this->createDirectory($this->targetDirectory);
+
+        $target = sprintf(
+            '%s%s%s.%s',
+            $this->targetDirectory,
+            DIRECTORY_SEPARATOR,
+            $target,
+            $this->format,
+        );
+
+        if ($this->format === 'dot') {
+            file_put_contents($target, $dot);
+
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'graphviz');
+
+        file_put_contents($tmpFile, $dot);
+
+        exec(
+            sprintf(
+                'dot -T%s -o %s %s > /dev/null 2>&1',
+                $this->format,
+                $target,
+                $tmpFile,
+            ),
+        );
+
+        unlink($tmpFile);
     }
 
     /**
