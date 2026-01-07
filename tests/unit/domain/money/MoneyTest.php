@@ -99,7 +99,7 @@ final class MoneyTest extends TestCase
 
         $this->expectException(CurrencyMismatchException::class);
 
-        $c = $a->plus($b);
+        $a->plus($b);
     }
 
     public function testAnotherMoneyObjectWithDifferentCurrencyCannotBeSubtracted(): void
@@ -109,7 +109,7 @@ final class MoneyTest extends TestCase
 
         $this->expectException(CurrencyMismatchException::class);
 
-        $c = $a->minus($b);
+        $a->minus($b);
     }
 
     public function testCanBeCompared(): void
