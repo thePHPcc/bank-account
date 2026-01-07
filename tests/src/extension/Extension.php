@@ -40,7 +40,7 @@ final class Extension implements ExtensionInterface
     private string $format;
 
     /**
-     * @var array<class-string, array{uses: list<class-string>, emits: list<class-string>}>
+     * @var array<class-string, array{consumes: list<class-string>, emits: list<class-string>}>
      */
     private array $commands = [];
 
@@ -88,15 +88,15 @@ final class Extension implements ExtensionInterface
 
         if (!isset($this->commands[$data['when']['className']])) {
             $this->commands[$data['when']['className']] = [
-                'uses'  => [],
-                'emits' => [],
+                'consumes' => [],
+                'emits'    => [],
             ];
         }
 
-        $this->commands[$data['when']['className']]['uses'] = array_values(
+        $this->commands[$data['when']['className']]['consumes'] = array_values(
             array_unique(
                 array_merge(
-                    $this->commands[$data['when']['className']]['uses'],
+                    $this->commands[$data['when']['className']]['consumes'],
                     array_column($data['given'], 'className'),
                 ),
             ),
