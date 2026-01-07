@@ -10,7 +10,7 @@ use function mb_strlen;
 use function sprintf;
 use function str_replace;
 
-final readonly class DotRenderer
+final readonly class TestRenderer
 {
     /**
      * @param list<non-empty-string> $given

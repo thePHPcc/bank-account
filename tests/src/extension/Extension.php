@@ -130,7 +130,7 @@ final class Extension implements ExtensionInterface
             $tmp       = explode('\\', $test['test']->className());
             $className = array_pop($tmp);
 
-            $dot = (new DotRenderer)->render(
+            $dot = (new TestRenderer)->render(
                 $test['given'],
                 $test['when'],
                 $test['then'],
