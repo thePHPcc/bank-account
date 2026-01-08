@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 #[CoversClass(ProcessingOpenAccountCommandProcessor::class)]
 #[Group('integration/application')]
 #[Group('integration/application/command-processor')]
+#[Group('visual-documentation')]
 #[Medium]
 #[TestDox('ProcessingOpenAccountCommandProcessor')]
 final class OpenAccountCommandProcessorTest extends EventTestCase

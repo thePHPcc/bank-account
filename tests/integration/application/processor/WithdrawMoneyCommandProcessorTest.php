@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 #[CoversClass(ProcessingWithdrawMoneyCommandProcessor::class)]
 #[Group('integration/application')]
 #[Group('integration/application/command-processor')]
+#[Group('visual-documentation')]
 #[TestDox('ProcessingWithdrawMoneyCommandProcessor')]
 #[Medium]
 final class WithdrawMoneyCommandProcessorTest extends EventTestCase

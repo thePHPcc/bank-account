@@ -30,6 +30,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Uuid::class)]
 #[Group('unit/application')]
 #[Group('unit/application/projection')]
+#[Group('visual-documentation')]
 #[Small]
 #[TestDox('BankAccountHtmlProjector')]
 final class BankAccountHtmlProjectorTest extends TestCase
