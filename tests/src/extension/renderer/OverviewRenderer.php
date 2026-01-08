@@ -2,6 +2,7 @@
 namespace example\framework\event\test\extension;
 
 use const PHP_EOL;
+use function array_keys;
 use function array_last;
 use function array_map;
 use function array_merge;
@@ -19,13 +20,15 @@ final readonly class OverviewRenderer extends Renderer
 {
     /**
      * @param array<class-string, array{consumes: list<class-string>, emits: list<class-string>}> $commands
+     * @param array<class-string, list<class-string>>                                             $projectors
      */
-    public function render(array $commands): void
+    public function render(array $commands, array $projectors): void
     {
         $commandProcessors     = [];
-        $events                = [];
         $commandProcessorNodes = '';
+        $events                = [];
         $eventNodes            = '';
+        $projectorNodes        = '';
         $emissionEdges         = '';
         $consumptionEdges      = '';
 
@@ -41,7 +44,7 @@ final readonly class OverviewRenderer extends Renderer
 
             foreach ($_events['emits'] as $event) {
                 $emissionEdges .= sprintf(
-                    '  %s -> %s' . PHP_EOL,
+                    '  %s -> %s;' . PHP_EOL,
                     $commandProcessor,
                     array_last(explode('\\', $event)),
                 );
@@ -49,7 +52,7 @@ final readonly class OverviewRenderer extends Renderer
 
             foreach ($_events['consumes'] as $event) {
                 $consumptionEdges .= sprintf(
-                    '  %s -> %s' . PHP_EOL,
+                    '  %s -> %s;' . PHP_EOL,
                     array_last(explode('\\', $event)),
                     $commandProcessor,
                 );
@@ -78,6 +81,32 @@ final readonly class OverviewRenderer extends Renderer
             );
         }
 
+        foreach ($projectors as $projector => $eventsConsumedByProjector) {
+            foreach ($eventsConsumedByProjector as $event) {
+                $consumptionEdges .= sprintf(
+                    '  %s -> %s;' . PHP_EOL,
+                    array_last(explode('\\', $event)),
+                    array_last(explode('\\', $projector)),
+                );
+            }
+        }
+
+        $projectors = array_map(
+            static function (string $projector): string
+            {
+                return array_last(explode('\\', $projector));
+            },
+            array_keys($projectors),
+        );
+
+        foreach ($projectors as $projector) {
+            $projectorNodes .= sprintf(
+                '  %s [label="%s"];' . PHP_EOL,
+                $projector,
+                $projector,
+            );
+        }
+
         $template = file_get_contents(__DIR__ . '/../templates/overview.dot');
 
         assert(is_string($template));
@@ -88,6 +117,8 @@ final readonly class OverviewRenderer extends Renderer
                 '{{command_processor_node_list}}',
                 '{{event_nodes}}',
                 '{{event_node_list}}',
+                '{{projector_nodes}}',
+                '{{projector_node_list}}',
                 '{{emission_edges}}',
                 '{{consumption_edges}}',
             ],
@@ -96,6 +127,8 @@ final readonly class OverviewRenderer extends Renderer
                 implode(', ', $commandProcessors),
                 rtrim($eventNodes),
                 implode(', ', $events),
+                rtrim($projectorNodes),
+                implode(', ', $projectors),
                 rtrim($emissionEdges),
                 rtrim($consumptionEdges),
             ],

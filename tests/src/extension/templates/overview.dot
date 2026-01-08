@@ -11,9 +11,11 @@ strict digraph EventSystem {
 
     legend_cmd   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#6699ff"];
     legend_event [label="Event", shape=box, style="filled, rounded", fillcolor="#ff9900"];
+    legend_read_model [label="Read Model", shape=box, style="filled, rounded", fillcolor="#66ff00"];
 
     legend_cmd -> legend_event [label="emits", style=solid, color="#1976D2"];
     legend_event -> legend_cmd [label="consumed by", style=dashed, color="#F57C00"];
+    legend_event -> legend_read_model [label="consumed by", style=dashed, color="#F57C00"];
   }
 
   node [shape=box, style="filled, rounded", fillcolor="#6699ff"];
@@ -22,8 +24,12 @@ strict digraph EventSystem {
   node [shape=box, style="filled, rounded", fillcolor="#ff9900"];
 {{event_nodes}}
 
+  node [shape=box, style="filled, rounded", fillcolor="#66ff00"];
+{{projector_nodes}}
+
   { rank=same; {{command_processor_node_list}} }
   { rank=same; {{event_node_list}} }
+  { rank=same; {{projector_node_list}} }
 
   edge [style=solid, color="#1976D2"];
 {{emission_edges}}

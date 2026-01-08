@@ -8,6 +8,7 @@ use function array_values;
 use function assert;
 use function json_encode;
 use example\bankaccount\application\BankAccountEventSourcer;
+use example\bankaccount\application\BankAccountHtmlProjector;
 use example\bankaccount\application\CloseAccountCommandProcessor;
 use example\bankaccount\application\DepositMoneyCommandProcessor;
 use example\bankaccount\application\DispatchingEventEmitter;
@@ -28,6 +29,8 @@ use example\bankaccount\domain\OpenAccountCommand;
 use example\bankaccount\domain\WithdrawMoneyCommand;
 use example\framework\library\RandomUuidGenerator;
 use example\framework\library\Uuid;
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +52,13 @@ abstract class EventTestCase extends TestCase
      */
     private array $when;
 
-    final protected function setUp(): void
+    /**
+     * @var ?class-string
+     */
+    private ?string $projector = null;
+
+    #[Before]
+    final protected function prepareEventSystem(): void
     {
         $this->reader     = $this->createStub(EventReader::class);
         $this->sourcer    = new BankAccountEventSourcer($this->reader);
@@ -58,6 +67,24 @@ abstract class EventTestCase extends TestCase
         $this->emitter = new DispatchingEventEmitter(
             $this->dispatcher,
             new RandomUuidGenerator,
+        );
+    }
+
+    #[After]
+    final protected function provideAdditionalInformationForProjectorTests(): void
+    {
+        if ($this->projector === null) {
+            return;
+        }
+
+        $this->provideAdditionalInformation(
+            json_encode(
+                [
+                    'given'     => $this->given,
+                    'projector' => $this->projector,
+                ],
+                JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT,
+            ),
         );
     }
 
@@ -222,6 +249,13 @@ abstract class EventTestCase extends TestCase
             $amount,
             $description,
         );
+    }
+
+    final protected function bankAccountHtmlProjector(): BankAccountHtmlProjector
+    {
+        $this->projector = BankAccountHtmlProjector::class;
+
+        return new BankAccountHtmlProjector($this->reader);
     }
 
     private function processorFor(CloseAccountCommand|DepositMoneyCommand|OpenAccountCommand|WithdrawMoneyCommand $command): CloseAccountCommandProcessor|DepositMoneyCommandProcessor|OpenAccountCommandProcessor|WithdrawMoneyCommandProcessor

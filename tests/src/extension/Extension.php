@@ -8,6 +8,7 @@ use function array_unique;
 use function array_values;
 use function assert;
 use function in_array;
+use function is_array;
 use function json_decode;
 use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
@@ -32,6 +33,11 @@ final class Extension implements ExtensionInterface
      * @var array<class-string, array{consumes: list<class-string>, emits: list<class-string>}>
      */
     private array $commands = [];
+
+    /**
+     * @var array<class-string, list<class-string>>
+     */
+    private array $projectors = [];
 
     /**
      * @var list<array{test: TestMethod, given: list<non-empty-string>, when: non-empty-string, then: list<non-empty-string>}>
@@ -68,11 +74,33 @@ final class Extension implements ExtensionInterface
 
     public function testProvidedAdditionalInformation(AdditionalInformationProvided $event): void
     {
+        $data = json_decode($event->additionalInformation(), true, flags: JSON_THROW_ON_ERROR);
+
+        assert(is_array($data));
+
+        if (isset($data['projector'])) {
+            /**
+             * @var array{projector: class-string, given: list<array{className: class-string, description: non-empty-string}>} $data
+             */
+            if (!isset($this->projectors[$data['projector']])) {
+                $this->projectors[$data['projector']] = [];
+            }
+
+            $this->projectors[$data['projector']] = array_values(
+                array_unique(
+                    array_merge(
+                        $this->projectors[$data['projector']],
+                        array_column($data['given'], 'className'),
+                    ),
+                ),
+            );
+
+            return;
+        }
+
         /**
          * @var array{given: list<array{className: class-string, description: non-empty-string}>, when: array{className: class-string, description: non-empty-string}, then: list<array{className: class-string, description: non-empty-string}>} $data
          */
-        $data = json_decode($event->additionalInformation(), true, flags: JSON_THROW_ON_ERROR);
-
         if (!isset($this->commands[$data['when']['className']])) {
             $this->commands[$data['when']['className']] = [
                 'consumes' => [],
@@ -116,6 +144,7 @@ final class Extension implements ExtensionInterface
     {
         new OverviewRenderer($this->targetDirectory, $this->format)->render(
             $this->commands,
+            $this->projectors,
         );
     }
 
