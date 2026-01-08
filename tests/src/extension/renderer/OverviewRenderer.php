@@ -11,19 +11,16 @@ use function explode;
 use function file_get_contents;
 use function implode;
 use function is_string;
-use function mb_strlen;
 use function rtrim;
 use function sprintf;
 use function str_replace;
 
-final readonly class OverviewRenderer
+final readonly class OverviewRenderer extends Renderer
 {
     /**
      * @param array<class-string, array{consumes: list<class-string>, emits: list<class-string>}> $commands
-     *
-     * @return non-empty-string
      */
-    public function render(array $commands): string
+    public function render(array $commands): void
     {
         $commandProcessors     = [];
         $events                = [];
@@ -81,11 +78,11 @@ final readonly class OverviewRenderer
             );
         }
 
-        $template = file_get_contents(__DIR__ . '/templates/overview.dot');
+        $template = file_get_contents(__DIR__ . '/../templates/overview.dot');
 
         assert(is_string($template));
 
-        $result = str_replace(
+        $dot = str_replace(
             [
                 '{{command_processor_nodes}}',
                 '{{command_processor_node_list}}',
@@ -105,40 +102,9 @@ final readonly class OverviewRenderer
             $template,
         );
 
-        assert(is_string($result));
-        assert($result !== '');
+        assert(is_string($dot));
+        assert($dot !== '');
 
-        return $result;
-    }
-
-    /**
-     * @param non-empty-string $label
-     *
-     * @return non-empty-string
-     */
-    private function formatLabel(string $label): string
-    {
-        $words = explode(' ', $label);
-        $lines = [];
-        $line  = '';
-
-        foreach ($words as $word) {
-            if (mb_strlen($line) + mb_strlen($word) > 22) {
-                $lines[] = $line;
-                $line    = '';
-            }
-
-            if ($line === '') {
-                $line = $word;
-
-                continue;
-            }
-
-            $line .= ' ' . $word;
-        }
-
-        $lines[] = $line;
-
-        return implode('\n', $lines);
+        $this->renderDot('overview', $dot);
     }
 }

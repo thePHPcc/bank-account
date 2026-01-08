@@ -1,25 +1,17 @@
 <?php declare(strict_types=1);
 namespace example\framework\event\test\extension;
 
-use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 use function array_column;
+use function array_last;
 use function array_merge;
-use function array_pop;
 use function array_unique;
 use function array_values;
 use function assert;
-use function exec;
 use function explode;
-use function file_put_contents;
 use function in_array;
-use function is_dir;
 use function json_decode;
-use function mkdir;
 use function sprintf;
-use function sys_get_temp_dir;
-use function tempnam;
-use function unlink;
 use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
@@ -125,74 +117,24 @@ final class Extension implements ExtensionInterface
 
     private function renderOverview(): void
     {
-        $this->renderDot(
-            'overview',
-            (new OverviewRenderer)->render(
-                $this->commands,
-            ),
+        new OverviewRenderer($this->targetDirectory, $this->format)->render(
+            $this->commands,
         );
     }
 
     private function renderGivenWhenThen(): void
     {
         foreach ($this->tests as $test) {
-            $tmp       = explode('\\', $test['test']->className());
-            $className = array_pop($tmp);
-
-            $this->renderDot(
+            new GivenWhenThenRenderer($this->targetDirectory, $this->format)->render(
                 sprintf(
                     '%s_%s',
-                    $className,
+                    array_last(explode('\\', $test['test']->className())),
                     $test['test']->methodName(),
                 ),
-                (new GivenWhenThenRenderer)->render(
-                    $test['given'],
-                    $test['when'],
-                    $test['then'],
-                ),
+                $test['given'],
+                $test['when'],
+                $test['then'],
             );
         }
-    }
-
-    private function renderDot(string $target, string $dot): void
-    {
-        $this->createDirectory($this->targetDirectory);
-
-        $target = sprintf(
-            '%s%s%s.%s',
-            $this->targetDirectory,
-            DIRECTORY_SEPARATOR,
-            $target,
-            $this->format,
-        );
-
-        if ($this->format === 'dot') {
-            file_put_contents($target, $dot);
-
-            return;
-        }
-
-        $tmpFile = tempnam(sys_get_temp_dir(), 'graphviz');
-
-        file_put_contents($tmpFile, $dot);
-
-        exec(
-            sprintf(
-                'dot -T%s -o %s %s > /dev/null 2>&1',
-                $this->format,
-                $target,
-                $tmpFile,
-            ),
-        );
-
-        unlink($tmpFile);
-    }
-
-    /**
-     * @param non-empty-string $directory
-     */
-    private function createDirectory(string $directory): bool
-    {
-        return !(!is_dir($directory) && !@mkdir($directory, 0o777, true) && !is_dir($directory));
     }
 }

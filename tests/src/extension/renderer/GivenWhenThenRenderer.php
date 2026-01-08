@@ -10,16 +10,15 @@ use function mb_strlen;
 use function sprintf;
 use function str_replace;
 
-final readonly class GivenWhenThenRenderer
+final readonly class GivenWhenThenRenderer extends Renderer
 {
     /**
+     * @param non-empty-string       $target
      * @param list<non-empty-string> $given
      * @param non-empty-string       $when
      * @param list<non-empty-string> $then
-     *
-     * @return non-empty-string
      */
-    public function render(array $given, string $when, array $then): string
+    public function render(string $target, array $given, string $when, array $then): void
     {
         $edges       = [];
         $givenBuffer = '';
@@ -53,11 +52,11 @@ EOT,
             $edges[] = sprintf('then_%d', $index + 1);
         }
 
-        $template = file_get_contents(__DIR__ . '/templates/given_when_then.dot');
+        $template = file_get_contents(__DIR__ . '/../templates/given_when_then.dot');
 
         assert(is_string($template));
 
-        $result = str_replace(
+        $dot = str_replace(
             [
                 '{{given}}',
                 '{{when}}',
@@ -73,10 +72,10 @@ EOT,
             $template,
         );
 
-        assert(is_string($result));
-        assert($result !== '');
+        assert(is_string($dot));
+        assert($dot !== '');
 
-        return $result;
+        $this->renderDot($target, $dot);
     }
 
     /**
