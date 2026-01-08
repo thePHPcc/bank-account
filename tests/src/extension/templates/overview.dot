@@ -1,0 +1,33 @@
+strict digraph EventSystem {
+  graph [labelloc="t", label="", splines=true, overlap=false, rankdir="LR"];
+  node  [fontname="Segoe UI", fontsize=10];
+  edge  [fontname="Segoe UI", fontsize=9, color="#555555"];
+
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=10;
+    style="dashed, rounded";
+    color="#CCCCCC";
+
+    legend_cmd   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#6699ff"];
+    legend_event [label="Event", shape=box, style="filled, rounded", fillcolor="#ff9900"];
+
+    legend_cmd -> legend_event [label="emits", style=solid, color="#1976D2"];
+    legend_event -> legend_cmd [label="consumed by", style=dashed, color="#F57C00"];
+  }
+
+  node [shape=box, style="filled, rounded", fillcolor="#6699ff"];
+{{command_processor_nodes}}
+
+  node [shape=box, style="filled, rounded", fillcolor="#ff9900"];
+{{event_nodes}}
+
+  { rank=same; {{command_processor_node_list}} }
+  { rank=same; {{event_node_list}} }
+
+  edge [style=solid, color="#1976D2"];
+{{emission_edges}}
+
+  edge [style=dashed, color="#F57C00"];
+{{consumption_edges}}
+}

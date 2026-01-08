@@ -119,7 +119,18 @@ final class Extension implements ExtensionInterface
 
     public function testRunnerFinished(): void
     {
+        $this->renderOverview();
         $this->renderGivenWhenThen();
+    }
+
+    private function renderOverview(): void
+    {
+        $this->renderDot(
+            'overview',
+            (new OverviewRenderer)->render(
+                $this->commands,
+            ),
+        );
     }
 
     private function renderGivenWhenThen(): void
