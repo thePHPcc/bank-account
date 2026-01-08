@@ -3,15 +3,12 @@ namespace example\framework\event\test\extension;
 
 use const JSON_THROW_ON_ERROR;
 use function array_column;
-use function array_last;
 use function array_merge;
 use function array_unique;
 use function array_values;
 use function assert;
-use function explode;
 use function in_array;
 use function json_decode;
-use function sprintf;
 use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
@@ -126,11 +123,7 @@ final class Extension implements ExtensionInterface
     {
         foreach ($this->tests as $test) {
             new GivenWhenThenRenderer($this->targetDirectory, $this->format)->render(
-                sprintf(
-                    '%s_%s',
-                    array_last(explode('\\', $test['test']->className())),
-                    $test['test']->methodName(),
-                ),
+                $test['test'],
                 $test['given'],
                 $test['when'],
                 $test['then'],

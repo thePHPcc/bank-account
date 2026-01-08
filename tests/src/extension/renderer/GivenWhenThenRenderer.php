@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace example\framework\event\test\extension;
 
+use function array_last;
 use function assert;
 use function explode;
 use function file_get_contents;
@@ -9,17 +10,23 @@ use function is_string;
 use function mb_strlen;
 use function sprintf;
 use function str_replace;
+use PHPUnit\Event\Code\TestMethod;
 
 final readonly class GivenWhenThenRenderer extends Renderer
 {
     /**
-     * @param non-empty-string       $target
      * @param list<non-empty-string> $given
      * @param non-empty-string       $when
      * @param list<non-empty-string> $then
      */
-    public function render(string $target, array $given, string $when, array $then): void
+    public function render(TestMethod $test, array $given, string $when, array $then): void
     {
+        $target = sprintf(
+            '%s_%s',
+            array_last(explode('\\', $test->className())),
+            $test->methodName(),
+        );
+
         $edges       = [];
         $givenBuffer = '';
 
