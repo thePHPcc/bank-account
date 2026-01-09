@@ -9,31 +9,31 @@ strict digraph EventSystem {
     style="dashed, rounded";
     color="#CCCCCC";
 
-    legend_cmd   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#6699ff"];
-    legend_event [label="Event", shape=box, style="filled, rounded", fillcolor="#ff9900"];
-    legend_read_model [label="Read Model", shape=box, style="filled, rounded", fillcolor="#66ff00"];
+    legend_cmd   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#729fcf"];
+    legend_event [label="Event", shape=box, style="filled, rounded", fillcolor="#fcaf3e"];
+    legend_read_model [label="Read Model", shape=box, style="filled, rounded", fillcolor="#8ae234"];
 
-    legend_cmd -> legend_event [label="emits", style=solid, color="#1976D2"];
-    legend_event -> legend_cmd [label="consumed by", style=dashed, color="#F57C00"];
-    legend_event -> legend_read_model [label="consumed by", style=dashed, color="#F57C00"];
+    legend_cmd -> legend_event [label="emits", style=solid, color="#729fcf"];
+    legend_event -> legend_cmd [label="consumed by", style=dashed, color="#fcaf3e"];
+    legend_event -> legend_read_model [label="consumed by", style=dashed, color="#fcaf3e"];
   }
 
-  node [shape=box, style="filled, rounded", fillcolor="#6699ff"];
+  node [shape=box, style="filled, rounded", fillcolor="#729fcf"];
 {{command_processor_nodes}}
 
-  node [shape=box, style="filled, rounded", fillcolor="#ff9900"];
+  node [shape=box, style="filled, rounded", fillcolor="#fcaf3e"];
 {{event_nodes}}
 
-  node [shape=box, style="filled, rounded", fillcolor="#66ff00"];
+  node [shape=box, style="filled, rounded", fillcolor="#8ae234"];
 {{projector_nodes}}
 
   { rank=same; {{command_processor_node_list}} }
   { rank=same; {{event_node_list}} }
   { rank=same; {{projector_node_list}} }
 
-  edge [style=solid, color="#1976D2"];
+  edge [style=solid, color="#729fcf"];
 {{emission_edges}}
 
-  edge [style=dashed, color="#F57C00"];
+  edge [style=dashed, color="#fcaf3e"];
 {{consumption_edges}}
 }
