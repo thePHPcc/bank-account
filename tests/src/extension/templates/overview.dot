@@ -9,12 +9,14 @@ strict digraph EventSystem {
     style="dashed, rounded";
     color="#CCCCCC";
 
-    legend_cmd   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#729fcf"];
+    legend_command_processor   [label="Command Processor", shape=box, style="filled, rounded", fillcolor="#729fcf"];
     legend_event [label="Event", shape=box, style="filled, rounded", fillcolor="#fcaf3e"];
+    legend_event_processor [label="Event Processor", shape=box, style="filled, rounded", fillcolor="#e9b96e"];
     legend_read_model [label="Read Model", shape=box, style="filled, rounded", fillcolor="#8ae234"];
 
-    legend_cmd -> legend_event [label="emits", style=solid, color="#729fcf"];
-    legend_event -> legend_cmd [label="consumed by", style=dashed, color="#fcaf3e"];
+    legend_command_processor -> legend_event [label="emits", style=solid, color="#729fcf"];
+    legend_event -> legend_command_processor [label="consumed by", style=dashed, color="#fcaf3e"];
+    legend_event -> legend_event_processor [label="consumed by", style=dashed, color="#fcaf3e"];
     legend_event -> legend_read_model [label="consumed by", style=dashed, color="#fcaf3e"];
   }
 
