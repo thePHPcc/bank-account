@@ -41,7 +41,8 @@ final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
 
         $sourcer
             ->method('source')
-            ->willReturn($bankAccount);
+            ->willReturn($bankAccount)
+            ->seal();
 
         $emitter = $this->createMock(EventEmitter::class);
 
@@ -52,19 +53,8 @@ final class ProcessingDepositMoneyCommandProcessorTest extends TestCase
                 $this->isInstanceOf(Uuid::class),
                 $amount,
                 $description,
-            );
-
-        $emitter
-            ->expects($this->never())
-            ->method('accountOpened');
-
-        $emitter
-            ->expects($this->never())
-            ->method('accountClosed');
-
-        $emitter
-            ->expects($this->never())
-            ->method('moneyWithdrawn');
+            )
+            ->seal();
 
         $processor = new ProcessingDepositMoneyCommandProcessor($sourcer, $emitter);
 

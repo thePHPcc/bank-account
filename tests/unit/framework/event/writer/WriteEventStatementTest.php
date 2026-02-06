@@ -28,7 +28,8 @@ final class WriteEventStatementTest extends TestCase
                 'correlation-id',
                 'topic',
                 'payload',
-            );
+            )
+            ->seal();
 
         $statement = new WriteEventStatement('id', 'correlation-id', 'topic', 'payload');
 

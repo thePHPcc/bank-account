@@ -26,7 +26,8 @@ final class ReadEventsForCorrelationStatementTest extends TestCase
               WHERE correlation_id = ?
               ORDER BY id;',
                 'correlation-id',
-            );
+            )
+            ->seal();
 
         $statement = new ReadEventsForCorrelationStatement('correlation-id');
 

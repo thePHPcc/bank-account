@@ -33,7 +33,8 @@ final class CloseAccountCommandTest extends TestCase
         $processor
             ->expects($this->once())
             ->method('process')
-            ->with($domainCommand);
+            ->with($domainCommand)
+            ->seal();
 
         $command = new CloseAccountCommand(
             $processor,

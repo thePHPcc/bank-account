@@ -27,19 +27,8 @@ final class ProcessingOpenAccountCommandProcessorTest extends TestCase
         $emitter
             ->expects($this->once())
             ->method('accountOpened')
-            ->with($owner);
-
-        $emitter
-            ->expects($this->never())
-            ->method('accountClosed');
-
-        $emitter
-            ->expects($this->never())
-            ->method('moneyDeposited');
-
-        $emitter
-            ->expects($this->never())
-            ->method('moneyWithdrawn');
+            ->with($owner)
+            ->seal();
 
         $processor = new ProcessingOpenAccountCommandProcessor($emitter);
 

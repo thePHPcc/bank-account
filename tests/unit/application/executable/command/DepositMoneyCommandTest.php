@@ -39,7 +39,8 @@ final class DepositMoneyCommandTest extends TestCase
         $processor
             ->expects($this->once())
             ->method('process')
-            ->with($domainCommand);
+            ->with($domainCommand)
+            ->seal();
 
         $command = new DepositMoneyCommand(
             $processor,

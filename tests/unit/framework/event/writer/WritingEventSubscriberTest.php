@@ -25,7 +25,8 @@ final class WritingEventSubscriberTest extends TestCase
         $writer
             ->expects($this->once())
             ->method('write')
-            ->with($event);
+            ->with($event)
+            ->seal();
 
         $subscriber = new WritingEventSubscriber($writer);
 

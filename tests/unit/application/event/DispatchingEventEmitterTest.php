@@ -56,7 +56,8 @@ final class DispatchingEventEmitterTest extends TestCase
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($eventId);
+            ->willReturn($eventId)
+            ->seal();
 
         $owner = 'the-owner';
 
@@ -70,7 +71,8 @@ final class DispatchingEventEmitterTest extends TestCase
                     $eventId,
                     $owner,
                 ),
-            );
+            )
+            ->seal();
 
         $this->emitter->accountOpened($owner);
     }
@@ -84,7 +86,8 @@ final class DispatchingEventEmitterTest extends TestCase
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($eventId);
+            ->willReturn($eventId)
+            ->seal();
 
         $this
             ->dispatcher
@@ -95,7 +98,8 @@ final class DispatchingEventEmitterTest extends TestCase
                     $eventId,
                     $accountId,
                 ),
-            );
+            )
+            ->seal();
 
         $this->emitter->accountClosed($accountId);
     }
@@ -109,7 +113,8 @@ final class DispatchingEventEmitterTest extends TestCase
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($eventId);
+            ->willReturn($eventId)
+            ->seal();
 
         $amount      = Money::from(123, Currency::from('EUR'));
         $description = 'the-description';
@@ -125,7 +130,8 @@ final class DispatchingEventEmitterTest extends TestCase
                     $amount,
                     $description,
                 ),
-            );
+            )
+            ->seal();
 
         $this->emitter->moneyDeposited($accountId, $amount, $description);
     }
@@ -139,7 +145,8 @@ final class DispatchingEventEmitterTest extends TestCase
         $this
             ->uuidGenerator
             ->method('generate')
-            ->willReturn($eventId);
+            ->willReturn($eventId)
+            ->seal();
 
         $amount      = Money::from(123, Currency::from('EUR'));
         $description = 'the-description';
@@ -155,7 +162,8 @@ final class DispatchingEventEmitterTest extends TestCase
                     $amount,
                     $description,
                 ),
-            );
+            )
+            ->seal();
 
         $this->emitter->moneyWithdrawn($accountId, $amount, $description);
     }

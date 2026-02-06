@@ -26,7 +26,8 @@ final class ReadEventsForTopicStatementTest extends TestCase
                   WHERE topic IN (?)
                   ORDER BY id;',
                 'the-topic',
-            );
+            )
+            ->seal();
 
         $statement = new ReadEventsForTopicStatement(['the-topic']);
 
@@ -47,7 +48,8 @@ final class ReadEventsForTopicStatementTest extends TestCase
                   ORDER BY id;',
                 'the-topic',
                 'another-topic',
-            );
+            )
+            ->seal();
 
         $statement = new ReadEventsForTopicStatement(['the-topic', 'another-topic']);
 

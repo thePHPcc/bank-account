@@ -29,7 +29,8 @@ final class OpenAccountCommandTest extends TestCase
         $processor
             ->expects($this->once())
             ->method('process')
-            ->with($domainCommand);
+            ->with($domainCommand)
+            ->seal();
 
         $command = new OpenAccountCommand(
             $processor,

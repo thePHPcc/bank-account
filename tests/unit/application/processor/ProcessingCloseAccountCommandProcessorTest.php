@@ -38,25 +38,15 @@ final class ProcessingCloseAccountCommandProcessorTest extends TestCase
 
         $sourcer
             ->method('source')
-            ->willReturn($bankAccount);
+            ->willReturn($bankAccount)
+            ->seal();
 
         $emitter = $this->createMock(EventEmitter::class);
 
         $emitter
             ->expects($this->once())
-            ->method('accountClosed');
-
-        $emitter
-            ->expects($this->never())
-            ->method('accountOpened');
-
-        $emitter
-            ->expects($this->never())
-            ->method('moneyDeposited');
-
-        $emitter
-            ->expects($this->never())
-            ->method('moneyWithdrawn');
+            ->method('accountClosed')
+            ->seal();
 
         $processor = new ProcessingCloseAccountCommandProcessor($sourcer, $emitter);
 

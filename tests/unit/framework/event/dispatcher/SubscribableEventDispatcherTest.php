@@ -25,7 +25,8 @@ final class SubscribableEventDispatcherTest extends TestCase
         $subscriber
             ->expects($this->once())
             ->method('notify')
-            ->with($event);
+            ->with($event)
+            ->seal();
 
         $dispatcher->dispatch($event);
     }
