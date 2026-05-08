@@ -7,11 +7,19 @@ use function array_merge;
 use function array_unique;
 use function array_values;
 use function assert;
+use function count;
+use function explode;
 use function in_array;
 use function is_array;
 use function json_decode;
 use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Test\AdditionalInformationProvided;
+use PHPUnit\Event\Test\Passed as TestPassed;
+use PHPUnit\Event\Test\PreparationStarted as TestPreparationStarted;
+use PHPUnit\Metadata\CoversClass;
+use PHPUnit\Metadata\Group;
+use PHPUnit\Metadata\TestDox;
+use PHPUnit\Metadata\UsesClass;
 use PHPUnit\Runner\Extension\Extension as ExtensionInterface;
 use PHPUnit\Runner\Extension\Facade as ExtensionFacade;
 use PHPUnit\Runner\Extension\ParameterCollection;
@@ -44,6 +52,21 @@ final class Extension implements ExtensionInterface
      */
     private array $tests = [];
 
+    /**
+     * @var array<class-string, array{title: non-empty-string, responsibilities: list<non-empty-string>, collaborators: list<class-string>}>
+     */
+    private array $crcCards = [];
+
+    /**
+     * @var ?class-string
+     */
+    private ?string $currentSut = null;
+
+    /**
+     * @var ?non-empty-string
+     */
+    private ?string $currentResponsibility = null;
+
     public function bootstrap(Configuration $configuration, ExtensionFacade $facade, ParameterCollection $parameters): void
     {
         $targetDirectory = '/tmp';
@@ -68,6 +91,12 @@ final class Extension implements ExtensionInterface
 
         $facade->registerSubscribers(
             new AdditionalInformationProvidedSubscriber($this),
+            new TestPreparationStartedSubscriber($this),
+            new TestPassedSubscriber($this),
+            new TestStubCreatedSubscriber($this),
+            new TestStubForIntersectionOfInterfacesCreatedSubscriber($this),
+            new MockObjectCreatedSubscriber($this),
+            new MockObjectForIntersectionOfInterfacesCreatedSubscriber($this),
             new TestRunnerFinishedSubscriber($this),
         );
     }
@@ -134,10 +163,138 @@ final class Extension implements ExtensionInterface
         ];
     }
 
+    public function testPreparationStarted(TestPreparationStarted $event): void
+    {
+        $this->currentSut            = null;
+        $this->currentResponsibility = null;
+
+        $test = $event->test();
+
+        if (!$test instanceof TestMethod) {
+            return;
+        }
+
+        $classMetadata = $test->metadata()->isClassLevel();
+
+        $optedIn = false;
+
+        foreach ($classMetadata as $metadata) {
+            if ($metadata instanceof Group && $metadata->groupName() === 'visual-documentation') {
+                $optedIn = true;
+
+                break;
+            }
+        }
+
+        if (!$optedIn) {
+            return;
+        }
+
+        $sut = null;
+
+        foreach ($classMetadata as $metadata) {
+            if ($metadata instanceof CoversClass) {
+                $sut = $metadata->className();
+
+                break;
+            }
+        }
+
+        if ($sut === null) {
+            return;
+        }
+
+        $title = self::shortName($sut);
+
+        foreach ($classMetadata as $metadata) {
+            if ($metadata instanceof TestDox) {
+                $title = $metadata->text();
+
+                break;
+            }
+        }
+
+        if (!isset($this->crcCards[$sut])) {
+            $this->crcCards[$sut] = [
+                'title'            => $title,
+                'responsibilities' => [],
+                'collaborators'    => [],
+            ];
+        }
+
+        foreach ($classMetadata as $metadata) {
+            if ($metadata instanceof UsesClass) {
+                $this->addCollaborator($sut, $metadata->className());
+            }
+        }
+
+        $prettified = $test->testDox()->prettifiedMethodName();
+
+        $this->currentSut            = $sut;
+        $this->currentResponsibility = $prettified !== '' ? $prettified : null;
+    }
+
+    public function testPassed(TestPassed $event): void
+    {
+        if ($this->currentSut === null || $this->currentResponsibility === null) {
+            return;
+        }
+
+        if (!isset($this->crcCards[$this->currentSut])) {
+            return;
+        }
+
+        $card = $this->crcCards[$this->currentSut];
+
+        if (!in_array($this->currentResponsibility, $card['responsibilities'], true)) {
+            $card['responsibilities'][] = $this->currentResponsibility;
+        }
+
+        $this->crcCards[$this->currentSut] = $card;
+    }
+
+    /**
+     * @param class-string $className
+     */
+    public function recordCollaborator(string $className): void
+    {
+        if ($this->currentSut === null) {
+            return;
+        }
+
+        $this->addCollaborator($this->currentSut, $className);
+    }
+
     public function testRunnerFinished(): void
     {
         $this->renderOverview();
         $this->renderGivenWhenThen();
+        $this->renderCrcCards();
+    }
+
+    /**
+     * @param class-string $sut
+     * @param class-string $collaborator
+     */
+    private function addCollaborator(string $sut, string $collaborator): void
+    {
+        if ($collaborator === $sut) {
+            return;
+        }
+
+        if (!isset($this->crcCards[$sut])) {
+            return;
+        }
+
+        $card = $this->crcCards[$sut];
+
+        if (in_array($collaborator, $card['collaborators'], true)) {
+            return;
+        }
+
+        $card['collaborators'][] = $collaborator;
+
+        $this->crcCards[$sut] = $card;
     }
 
     private function renderOverview(): void
@@ -158,5 +315,27 @@ final class Extension implements ExtensionInterface
                 $test['then'],
             );
         }
+    }
+
+    private function renderCrcCards(): void
+    {
+        new CrcCardRenderer($this->targetDirectory, $this->format)->render(
+            $this->crcCards,
+        );
+    }
+
+    /**
+     * @param class-string $fqcn
+     *
+     * @return non-empty-string
+     */
+    private static function shortName(string $fqcn): string
+    {
+        $parts = explode('\\', $fqcn);
+        $short = $parts[count($parts) - 1];
+
+        assert($short !== '');
+
+        return $short;
     }
 }

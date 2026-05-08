@@ -1,0 +1,14 @@
+digraph CrcCard {
+    graph [bgcolor="transparent", margin=0];
+    node  [shape=plaintext, fontname="Segoe UI", fontsize=10];
+
+    card [label=<
+      <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6">
+        <TR><TD COLSPAN="2" BGCOLOR="#729fcf"><FONT POINT-SIZE="12"><B>{{title}}</B></FONT></TD></TR>
+        <TR>
+          <TD WIDTH="280" VALIGN="TOP" ALIGN="LEFT"><B>Responsibilities</B><BR ALIGN="LEFT"/><FONT POINT-SIZE="9">{{responsibilities}}</FONT></TD>
+          <TD WIDTH="220" VALIGN="TOP" ALIGN="LEFT"><B>Collaborators</B><BR ALIGN="LEFT"/><FONT POINT-SIZE="9">{{collaborators}}</FONT></TD>
+        </TR>
+      </TABLE>
+    >];
+}
