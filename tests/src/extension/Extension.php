@@ -30,6 +30,11 @@ final class Extension implements ExtensionInterface
     private string $format;
 
     /**
+     * @var ?non-empty-string
+     */
+    private ?string $htmlReport = null;
+
+    /**
      * @var array<class-string, array{consumes: list<class-string>, emits: list<class-string>}>
      */
     private array $commands = [];
@@ -65,6 +70,14 @@ final class Extension implements ExtensionInterface
         }
 
         $this->format = $format;
+
+        if ($parameters->has('htmlReport')) {
+            $htmlReport = $parameters->get('htmlReport');
+
+            if ($htmlReport !== '') {
+                $this->htmlReport = $htmlReport;
+            }
+        }
 
         $facade->registerSubscribers(
             new AdditionalInformationProvidedSubscriber($this),
@@ -138,6 +151,7 @@ final class Extension implements ExtensionInterface
     {
         $this->renderOverview();
         $this->renderGivenWhenThen();
+        $this->renderHtmlReport();
     }
 
     private function renderOverview(): void
@@ -158,5 +172,37 @@ final class Extension implements ExtensionInterface
                 $test['then'],
             );
         }
+    }
+
+    private function renderHtmlReport(): void
+    {
+        if ($this->htmlReport === null) {
+            return;
+        }
+
+        $useCases = [];
+
+        foreach ($this->tests as $test) {
+            $testDox = $test['test']->testDox();
+
+            $useCases[] = [
+                'prettifiedClassName'  => $testDox->prettifiedClassName(),
+                'prettifiedMethodName' => $testDox->prettifiedMethodName(),
+                'dot'                  => new GivenWhenThenRenderer($this->targetDirectory, 'svg')->dot(
+                    $test['given'],
+                    $test['when'],
+                    $test['then'],
+                ),
+            ];
+        }
+
+        new HtmlReportRenderer($this->targetDirectory, 'svg')->render(
+            $this->htmlReport,
+            new OverviewRenderer($this->targetDirectory, 'svg')->dot(
+                $this->commands,
+                $this->projectors,
+            ),
+            $useCases,
+        );
     }
 }

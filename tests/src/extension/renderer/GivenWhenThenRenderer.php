@@ -21,12 +21,25 @@ final readonly class GivenWhenThenRenderer extends Renderer
      */
     public function render(TestMethod $test, array $given, string $when, array $then): void
     {
-        $target = sprintf(
-            '%s_%s',
-            array_last(explode('\\', $test->className())),
-            $test->methodName(),
+        $this->renderDot(
+            sprintf(
+                '%s_%s',
+                array_last(explode('\\', $test->className())),
+                $test->methodName(),
+            ),
+            $this->dot($given, $when, $then),
         );
+    }
 
+    /**
+     * @param list<non-empty-string> $given
+     * @param non-empty-string       $when
+     * @param list<non-empty-string> $then
+     *
+     * @return non-empty-string
+     */
+    public function dot(array $given, string $when, array $then): string
+    {
         $edges       = [];
         $givenBuffer = '';
 
@@ -82,7 +95,7 @@ EOT,
         assert(is_string($dot));
         assert($dot !== '');
 
-        $this->renderDot($target, $dot);
+        return $dot;
     }
 
     /**

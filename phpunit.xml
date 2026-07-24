@@ -61,6 +61,7 @@
         <bootstrap class="example\framework\event\test\extension\Extension">
             <parameter name="targetDirectory" value="build"/>
             <parameter name="format" value="pdf"/>
+            <parameter name="htmlReport" value="documentation.html"/>
         </bootstrap>
     </extensions>
 </phpunit>

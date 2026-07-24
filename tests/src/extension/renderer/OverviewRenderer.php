@@ -24,6 +24,17 @@ final readonly class OverviewRenderer extends Renderer
      */
     public function render(array $commands, array $projectors): void
     {
+        $this->renderDot('overview', $this->dot($commands, $projectors));
+    }
+
+    /**
+     * @param array<class-string, array{consumes: list<class-string>, emits: list<class-string>}> $commands
+     * @param array<class-string, list<class-string>>                                             $projectors
+     *
+     * @return non-empty-string
+     */
+    public function dot(array $commands, array $projectors): string
+    {
         $commandProcessors     = [];
         $commandProcessorNodes = '';
         $events                = [];
@@ -138,6 +149,6 @@ final readonly class OverviewRenderer extends Renderer
         assert(is_string($dot));
         assert($dot !== '');
 
-        $this->renderDot('overview', $dot);
+        return $dot;
     }
 }
